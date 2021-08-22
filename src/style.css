@@ -1,0 +1,117 @@
+a:link {
+    color: inherit;
+    text-decoration: none;
+} /* unvisited link */
+a:visited {
+    color: inherit;
+    text-decoration: none;
+} /* visited link */
+a:hover {
+    color: inherit;
+    text-decoration: none;
+} /* mouse over link */
+a:active {
+    color: inherit;
+    text-decoration: none;
+} /* selected link */
+
+.main-dark-theme {
+    display: flex;
+    flex-direction: column;
+
+    /* background: #232741; */
+    background: #202124;
+    color: #d4dae4;
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    outline: none;
+    user-select: none;
+    overflow: auto;
+}
+
+.portfolio-content {
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    height: 100%;
+    margin: 0px 35px 35px 35px;
+    font-family: monospace;
+    font-size: large;
+    overflow: hidden;
+    user-select: none;
+    z-index: 2;
+}
+
+.header-pjs {
+    height: 180px;
+    width: 65%;
+    background-image: url("../assets/logo/logo.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: 50% 50%;
+    z-index: 1;
+    margin-top: 12px;
+}
+
+.bg-space-pjs {
+    /* position: absolute; */
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 12px;
+    left: 0;
+}
+
+.project-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.project-card {
+    display: flex;
+    flex-direction: column;
+    width: 35%;
+    background: #151515;
+    border: 1px solid #ffffff;
+    border-radius: 12px;
+    padding: 24px;
+    color: #9f9f9f !important;
+    margin-bottom: 18px;
+}
+
+.project-card h3 {
+    margin: 0px 0px 12px 0px;
+    color: white !important;
+}
+
+.project-card-header {
+    display: flex;
+    flex-direction: row;
+    margin: 0px !important;
+    vertical-align: middle;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.project-card-sub-header {
+    margin-bottom: 12px;
+}
+
+.project-footer {
+    margin-bottom: 24px;
+    margin-top: 18px;
+}
+
+.margin-bottom-12 {
+    margin-bottom: 12px;
+}
+
+.margin-bottom-42 {
+    margin-bottom: 42px;
+}

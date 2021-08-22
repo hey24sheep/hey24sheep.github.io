@@ -1,0 +1,22 @@
+{
+  "name": "hey24sheep-portfolio",
+  "version": "1.0.0",
+  "description": "Portfolio of Heyramb Narayan Goyal a.k.a hey24sheep",
+  "main": "index.js",
+  "scripts": {
+    "serve": "serve",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "portfolio",
+    "hey24sheep",
+    "javascript",
+    "personal"
+  ],
+  "author": "https://github.com/hey24sheep",
+  "license": "MIT",
+  "devDependencies": {
+    "marked": "3.0.0",
+    "particles.js": "2.0.0"
+  }
+}

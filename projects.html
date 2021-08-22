@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/png" href="./assets/logo/logo.png"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Projects - Heyramb Narayan Goyal (Hey24sheep)</title>
+    <meta name="keywords" content="hey24sheep, Heyramb Narayan Goyal, manager, senior software developer, flutter, dart, csharp, c#, freelance, developer,
+         javascript, development, india, mobile, game, open source, projects, github">
+    <link rel="stylesheet" href="./src/style.css">
+    <meta name="description"
+        content="Portfolio website of Heyramb Narayan Goyal a.k.a Hey24sheep working as a Sr. Software Dev based in DL, India. Love creating stuff for people.">
+</head>
+
+<body class="main-dark-theme">
+    <div id="header-pjs" class="header-pjs" onclick="changeTheme()"></div>
+    <div id="bg-space-pjs" class="bg-space-pjs"></div>
+    <div id="portfolio-content" class="portfolio-content"></div>
+
+    <!-- include external .js files here-->
+    <script src="./node_modules/particles.js/particles.js"></script>
+    <script src="./node_modules/marked/marked.min.js"></script>
+
+    <!-- include project .js files here-->
+    <script src="./src/constants/theme_constants.js"></script>
+    <script src="./src/services/theme_change_service.js"></script>
+    <script src="./src/services/portfolio_service.js"></script>
+    <script src="./src/services/markdown_service.js"></script>
+    <script src="./src/services/particle_service.js"></script>
+
+    <!-- main .js file-->
+    <script src="./src/projects.js"></script>
+</body>
+
+</html>

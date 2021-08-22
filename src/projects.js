@@ -1,0 +1,2 @@
+generateProjectList();
+initParticleJs();
