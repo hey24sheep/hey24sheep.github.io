@@ -6,8 +6,8 @@
     "setup": "npm install && npm install -g uglifyjs-folder &&  npm install -g clean-css-cli",
     "build": "uglifyjs-folder src -eo dist && cleancss src/style.css -o dist/style.min.css",
     "clean": "cd ./dist && rd /s /q . 2>nul && cd..",
-    "cleanbuild" : "npm run clean & npm run build",
-    "serve" : "npm run cleanbuild && serve",
+    "cleanbuild": "npm run clean & npm run build",
+    "serve": "npm run cleanbuild && serve",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
