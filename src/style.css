@@ -31,6 +31,8 @@ a:active {
     outline: none;
     user-select: none;
     overflow: auto;
+    font-family: monospace;
+    font-size: large;
 }
 
 .portfolio-content {
@@ -39,8 +41,6 @@ a:active {
     width: 60%;
     height: 100%;
     margin: 0px 35px 35px 35px;
-    font-family: monospace;
-    font-size: large;
     overflow: hidden;
     user-select: none;
     z-index: 2;
