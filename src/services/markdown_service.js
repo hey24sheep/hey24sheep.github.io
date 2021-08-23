@@ -1,20 +1,27 @@
-function generateMarkdownHTML(markdownText) {
-    return marked(markdownText);
-}
+const markedWorker = new Worker('../markdown_worker.js');
+const timeoutLimit = 20 * 1000; // 20 seconds
+let markedTimeout;
+
+markedWorker.onmessage = (e) => {
+    clearTimeout(markedTimeout);
+    document.getElementById('portfolio-content').innerHTML = e.data.html;
+    markedWorker.terminate();
+};
 
 async function generatePortfolioFromGithub() {
-    let markdownText = await fetchMarkdownFromGithub();
-    const projectText = await fetchProjectMarkdown();
+    markedTimeout = setTimeout(() => {
+        markedWorker.terminate();
+        throw new Error('Marked took too long!');
+    }, timeoutLimit);
 
-    // <!--{{int}}--> is added on github hey24sheep/readme.md which gets replaced with projects.md
-    markdownText = markdownText.replace('<!--{{int}}-->', projectText);
-
-    const html = generateMarkdownHTML(markdownText);
-    document.getElementById('portfolio-content').innerHTML = html;
+    markedWorker.postMessage({ isMain: true });
 }
 
 async function generateProjectList() {
-    const projectText = await fetchProjectsListMarkdown();
-    const html = generateMarkdownHTML(projectText);
-    document.getElementById('portfolio-content').innerHTML = html;
+    markedTimeout = setTimeout(() => {
+        markedWorker.terminate();
+        throw new Error('Marked took too long!');
+    }, timeoutLimit);
+
+    markedWorker.postMessage({ isProjectList: true });
 }

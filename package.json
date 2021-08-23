@@ -2,9 +2,12 @@
   "name": "hey24sheep-portfolio",
   "version": "1.0.0",
   "description": "Portfolio of Heyramb Narayan Goyal a.k.a hey24sheep",
-  "main": "index.js",
   "scripts": {
-    "serve": "serve",
+    "setup": "npm install && npm install -g uglifyjs-folder &&  npm install -g clean-css-cli",
+    "build": "uglifyjs-folder src -eo dist && cleancss src/style.css -o dist/style.min.css",
+    "clean": "cd ./dist && rd /s /q . 2>nul && cd..",
+    "cleanbuild" : "npm run clean & npm run build",
+    "serve" : "npm run cleanbuild && serve",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -14,9 +17,11 @@
     "personal"
   ],
   "author": "https://github.com/hey24sheep",
-  "license": "MIT",
+  "license": "Apache License 2.0",
   "devDependencies": {
+    "clean-css-cli": "^5.3.3",
     "marked": "3.0.0",
-    "particles.js": "2.0.0"
+    "particles.js": "2.0.0",
+    "uglifyjs-folder": "^3.0.0"
   }
 }
