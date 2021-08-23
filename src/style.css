@@ -45,8 +45,8 @@ a:active {
     outline: none;
     user-select: none;
     overflow: auto;
-    font-family: monospace;
-    font-size: large;
+    font-family: monospace, "Courier New", Courier;;
+    /* font-size: large; */
 }
 
 .portfolio-content {
