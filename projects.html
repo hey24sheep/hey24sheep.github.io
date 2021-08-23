@@ -42,15 +42,15 @@
     <div id="bg-space-pjs" class="bg-space-pjs"></div>
     <div id="portfolio-content" class="portfolio-content"></div>
 
-    <!-- include external .js files here-->
-    <script src="./external/particle.min.js"></script>
-
     <script src="./dist/services/theme_change_service.min.js"></script>
     <script src="./dist/services/markdown_service.min.js"></script>
     <script src="./dist/services/particle_service.min.js"></script>
     <script src="./markdown_worker.js"></script>
 
     <script src="./dist/projects.min.js"></script>
+
+    <!-- include external .js files here-->
+    <script async src="./external/particle.min.js" onload="loadParticles()"></script>
 </body>
 
 </html>
