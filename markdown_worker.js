@@ -4,8 +4,6 @@ if ('function' === typeof importScripts) {
     let store;
     const currDate = new Date().toISOString();
 
-    initIDBStore();
-
     const lessThanOneHourAgo = (date) => {
         const HOUR = 1000 * 60 * 60;
         const anHourAgo = Date.now() - HOUR;
@@ -13,14 +11,42 @@ if ('function' === typeof importScripts) {
         return date > anHourAgo;
     }
 
+    async function isIdbAvailable() {
+        if (!indexedDB) {
+            // treat as resolve to fallback to uncache mode
+            return Promise.resolve(false);
+        }
+        // below code will check for private browsing
+        var db = indexedDB.open("test");
+        db.onerror = function () {
+            // if private mode in firefox, it will fail
+            // treat as resolve to fallback to uncache mode
+            return Promise.resolve(false);
+        };
+        db.onsuccess = function () {
+            return Promise.resolve(true);
+        };
+    }
+
     async function initIDBStore() {
-        if (IdbKvStore.INDEXEDDB_SUPPORT && !store) {
-            store = new IdbKvStore('hey24sheep.com_cache');
+        const _isIdbAvailable = await isIdbAvailable();
+        if (_isIdbAvailable && IdbKvStore.INDEXEDDB_SUPPORT && !store) {
+            store = new IdbKvStore('hey24sheep.com_cache', [], (err) => {
+                store = null; // treat as null to fallback to uncache mode
+                console.log('Unable to open IDB, error occured', err);
+            });
+
+            if (store) {
+                store.on('error', (err) => {
+                    console.log('Transaction error occured', err);
+                });
+            }
+        } else {
+            store = null; // treat as null to fallback to uncache mode
         }
     }
 
     async function isCacheExpired() {
-        initIDBStore();
         try {
             if (!store) {
                 return true; // store unavailable, treat as expired
@@ -38,7 +64,6 @@ if ('function' === typeof importScripts) {
     }
 
     async function getValueSafe(key) {
-        initIDBStore();
         if (!store) {
             return null; // store unavailable, treat as null
         }
@@ -57,10 +82,14 @@ if ('function' === typeof importScripts) {
     }
 
     async function setValueSafe(key, data) {
-        initIDBStore();
         if (store) {
-            await store.set(key, data);
-            await store.set('last_cache_dt', currDate);
+            try {
+                await store.set(key, data);
+                await store.set('last_cache_dt', currDate);
+            }
+            catch (e) {
+                console.log('worker : idb value retrieve failed, ', e);
+            }
         }
     }
 
@@ -128,6 +157,8 @@ if ('function' === typeof importScripts) {
     }
 
     onmessage = (e) => {
+        initIDBStore();
+
         if (e.data.isMain) {
             console.log("worker : ", e.data);
             generatePortfolioFromGithub();

@@ -1,5 +1,5 @@
 const markedWorker = new Worker('../markdown_worker.js');
-const timeoutLimit = 20 * 1000; // 20 seconds
+const timeoutLimit = 30 * 1000; // 30 seconds
 let markedTimeout;
 
 markedWorker.onmessage = (e) => {
