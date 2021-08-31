@@ -1,8 +1,10 @@
 if ('function' === typeof importScripts) {
     importScripts('./external/marked.min.js');
     importScripts('./external/idbkvstore.min.js');
-    const store = new IdbKvStore('hey24sheep.com_cache');
+    let store;
     const currDate = new Date().toISOString();
+
+    initIDBStore();
 
     const lessThanOneHourAgo = (date) => {
         const HOUR = 1000 * 60 * 60;
@@ -11,12 +13,18 @@ if ('function' === typeof importScripts) {
         return date > anHourAgo;
     }
 
-    async function setSyncTime() {
-        await store.set('last_cache_dt', currDate);
+    async function initIDBStore() {
+        if (IdbKvStore.INDEXEDDB_SUPPORT && !store) {
+            store = new IdbKvStore('hey24sheep.com_cache');
+        }
     }
 
     async function isCacheExpired() {
+        initIDBStore();
         try {
+            if (!store) {
+                return true; // store unavailable, treat as expired
+            }
             const value = await store.get('last_cache_dt');
             if (!value || (value && !lessThanOneHourAgo(new Date(value)))) {
                 return true; // expired
@@ -30,8 +38,9 @@ if ('function' === typeof importScripts) {
     }
 
     async function getValueSafe(key) {
-        if (!IdbKvStore.INDEXEDDB_SUPPORT) {
-            return null;
+        initIDBStore();
+        if (!store) {
+            return null; // store unavailable, treat as null
         }
         const isExpired = await isCacheExpired();
         if (isExpired) {
@@ -47,6 +56,14 @@ if ('function' === typeof importScripts) {
         return cachedData;
     }
 
+    async function setValueSafe(key, data) {
+        initIDBStore();
+        if (store) {
+            await store.set(key, data);
+            await store.set('last_cache_dt', currDate);
+        }
+    }
+
     // get readme markdown from https://github.com/hey24sheep/hey24sheep
     async function fetchMarkdownFromGithub() {
         const cachedData = await getValueSafe('portfolio');
@@ -55,8 +72,7 @@ if ('function' === typeof importScripts) {
         }
         let response = await fetch("https://raw.githubusercontent.com/hey24sheep/hey24sheep/main/README.md");
         const d = await response.text();
-        await store.set('portfolio', d);
-        await setSyncTime();
+        await setValueSafe('portfolio', d);
         return d;
     }
 
@@ -67,8 +83,7 @@ if ('function' === typeof importScripts) {
         }
         let response = await fetch('../../assets/projects/projects.md');
         const d = await response.text();
-        await store.set('projects', d);
-        await setSyncTime();
+        await setValueSafe('projects', d);
         return d;
     }
 
@@ -79,8 +94,7 @@ if ('function' === typeof importScripts) {
         }
         let response = await fetch('../../assets/projects/projects_list.md');
         const d = await response.text();
-        await store.set('projectsList', d);
-        await setSyncTime();
+        await setValueSafe('projectsList', d);
         return d;
     }
 
@@ -95,8 +109,7 @@ if ('function' === typeof importScripts) {
 
         if (!html) {
             html = marked(markdownText);
-            await store.set('html_portfolio', html);
-            await setSyncTime();
+            await setValueSafe('html_portfolio', html);
         }
 
         postMessage({ html: html });
@@ -108,8 +121,7 @@ if ('function' === typeof importScripts) {
 
         if (!html) {
             html = marked(markdownText);
-            await store.set('html_projectsList', html);
-            await setSyncTime();
+            await setValueSafe('html_projectsList', html);
         }
 
         postMessage({ html: html });
