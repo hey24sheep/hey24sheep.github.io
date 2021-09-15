@@ -1,0 +1,3 @@
+User-Agent: *
+Allow: /
+Sitemap: https://hey24sheep.com/sitemap.xml
