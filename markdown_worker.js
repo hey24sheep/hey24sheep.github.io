@@ -94,12 +94,15 @@ if ('function' === typeof importScripts) {
     }
 
     // get readme markdown from https://github.com/hey24sheep/hey24sheep
-    async function fetchMarkdownFromGithub() {
+    async function fetchPortfolioMarkdown() {
         const cachedData = await getValueSafe('portfolio');
         if (cachedData) {
             return cachedData;
         }
-        let response = await fetch("https://raw.githubusercontent.com/hey24sheep/hey24sheep/main/README.md");
+        let response = await fetch('../../assets/README.md');
+        if (response === null || response.body === null) {
+            response = await fetch("https://raw.githubusercontent.com/hey24sheep/hey24sheep/main/README.md");
+        }
         const d = await response.text();
         await setValueSafe('portfolio', d);
         return d;
@@ -128,7 +131,7 @@ if ('function' === typeof importScripts) {
     }
 
     async function generatePortfolioFromGithub() {
-        let markdownText = await fetchMarkdownFromGithub();
+        let markdownText = await fetchPortfolioMarkdown();
         const projectText = await fetchProjectMarkdown();
 
         // <!--{{int}}--> is added on github hey24sheep/readme.md which gets replaced with projects.md
