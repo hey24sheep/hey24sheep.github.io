@@ -19,6 +19,7 @@
 <p align='center'>
   🔧 <strong>ᴛᴇᴄʜɴᴏʟᴏɢɪᴇs & ᴛᴏᴏʟs</strong> 
   </br></br>
+  <img src="https://img.shields.io/static/v1?label=&message=Python&color=9cf&style=for-the-badge&logo=python&logoColor=black"/>
   <img src="https://img.shields.io/static/v1?label=&message=FLUTTER&color=9cf&style=for-the-badge&logo=flutter&logoColor=black"/>
   <img src="https://img.shields.io/static/v1?label=&message=.NET&color=9cf&style=for-the-badge&logo=.net&logoColor=black"/>
   <img src="https://img.shields.io/static/v1?label=&message=C-SHARP&color=9cf&style=for-the-badge&logo=c-sharp&logoColor=black"/>
