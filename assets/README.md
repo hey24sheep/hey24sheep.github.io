@@ -62,12 +62,14 @@
 <p align='center'>
   📣 <strong><i>ʀᴇᴀᴄʜ ᴍᴇ ᴀʀᴏᴜɴᴅ ᴛʜᴇ ᴡᴇʙ</i></strong></br></br>
   <a href="https://hey24sheep.com" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/hey24sheep.com-202124.svg?style=for-the-badge&logo=data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAADIAAAAcCAMAAAAURxzFAAAADFBMVEUAAAAbvfUcvfUcvfXEslmQAAAAA3RSTlMA4PgXbk0cAAAATElEQVR42u3RgQbAMAyE4dvu%2Fd95Y%2FiHkRyEkUPTK5%2BqajMZ32FH00kriWltYkqDsHJekmd8AQiBvPWfSPH8iPhQcEv0lYycCDGWzQW5CAN5SL8q5AAAAABJRU5ErkJggg%3D%3D"/></a>
-  <a href="https://linkedin.com/in/hey24sheep" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/linkedin-0077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white"/></a>
   <a href="https://github.com/hey24sheep" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/github-1a1a1a.svg?style=for-the-badge&logo=github&logoColor=white"/></a>
+  <a href="https://linkedin.com/in/hey24sheep" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/linkedin-0077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white"/></a>
+  <a href="https://www.kaggle.com/hey24sheep" target"_blank" rel=noopener noreferrer"><img src="https://img.shields.io/static/v1?label=&message=kaggle&color=9cf&style=for-the-badge&logo=kaggle&logoColor=white"/></a>
   <a href="https://twitter.com/hey24sheep" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/twitter/follow/hey24sheep?color=%231DA1F2&label=TWITTER&logo=twitter&logoColor=%231DA1F2&style=for-the-badge&labelColor=555555"/></a>
 <a href="https://pub.dev/publishers/hey24sheep.com/packages" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/pub.dev-01579b.svg?style=for-the-badge&logo=dart&logoColor=white"/></a>
   <a href="https://marketplace.visualstudio.com/publishers/Hey24sheep" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/VS%20Marketplace-007FFF.svg?style=for-the-badge&logo=visualstudio&logoColor=white"/>
   <a href="https://stackoverflow.com/users/5439109/hey24sheep" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/stackoverflow-grey.svg?style=for-the-badge&logo=stackoverflow&logoColor=orange"/></a>
+  <a href="https://hightechunveil.blogspot.com/" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/static/v1?label=&message=blog&color=fc4f08&style=for-the-badge&logo=blogger&logoColor=black"/></a>
   <a href="https://www.youtube.com/user/hey24sheep/videos" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/youtube-E4405F.svg?style=for-the-badge&logo=youtube&logoColor=white"/></a>
   <a href="https://instagram.com/hey24sheep" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/instagram-E4405F.svg?style=for-the-badge&logo=instagram&logoColor=white"/></a>
   <a href="https://twitch.tv/hey24sheep" target="_blank" rel="noopener noreferrer"><img src="https://img.shields.io/badge/twitch-9146FF.svg?style=for-the-badge&logo=twitch&logoColor=white"/></a>
