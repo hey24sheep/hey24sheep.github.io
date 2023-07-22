@@ -3,7 +3,18 @@
   </br></br>
   <div class="project-container">
     <!-- to update : add your latest more projects here -->
-    <a class="project-card" href="https://buildsys.co" target="_blank" rel="noopener noreferrer">
+    <a class="project-card" href="https://www.hartekdss.com/" target="_blank" rel="noopener noreferrer">
+      <div>
+        <div class="project-card-header">
+          <h3>HartekDSS</h3>
+        </div>
+        <div class="project-card-sub-header">
+          <sub>Sr. Software Engineer</sub>
+        </div>
+        <div>Responsible for software architecture, database design, cloud solutions & handle various software & web projects across teams</div>
+      </div>
+    </a>
+    <a class="project-card" href="https://in.linkedin.com/company/buildsysinc" target="_blank" rel="noopener noreferrer">
       <div>
         <div class="project-card-header">
           <h3>Buildsys</h3>
