@@ -1,0 +1,271 @@
+---
+import Base from '../layouts/Base.astro';
+import Sheep from '../components/Sheep.astro';
+import SheepRun from '../components/SheepRun.astro';
+import { site, links, contactHref, hats, inventory, ticker, pixelRuns, rarityColor } from '../data/content';
+
+const hatIcons = hats.map((h) => pixelRuns(h.art, { h: h.h, H: h.H }, 9));
+const external = (url: string) => /^https?:/.test(url);
+---
+<Base>
+  <header class="hud">
+    <nav class="wrap hud-inner" aria-label="Primary">
+      <a class="brand" href="#top"><span class="p1">P1</span><span>Hey24sheep</span></a>
+      <div class="hud-links">
+        <a href="#hats">Hats</a>
+        <a href="#play">Play</a>
+        <a href="#inventory">Inventory</a>
+        <a href="#party">Party up</a>
+      </div>
+      <div class="hud-stats">
+        <span><span class="gold" aria-hidden="true">★</span> {site.stats.stars}<span class="sr-only"> GitHub stars</span></span>
+        <span><span class="cyan">XP</span> {site.stats.commits}<span class="sr-only"> commits</span></span>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top" class="wrap">
+    <!-- Title screen -->
+    <section class="title" aria-labelledby="title-h">
+      <div class="title-head">
+        <p class="presents px">{site.name} presents</p>
+        <h1 id="title-h" class="wordmark">Hey<span class="n">24</span>sheep<span class="sr-only"> — {site.name}, technical architect and founder</span></h1>
+        <p class="tagline">Architect <span class="sep" aria-hidden="true">|</span> Founder <span class="sep" aria-hidden="true">|</span> <span class="many">And Many Other Hats</span></p>
+      </div>
+
+      <div class="lobby">
+        <nav class="menu box" aria-label="Main menu">
+          <p class="label">Main menu</p>
+          <a class="mi primary" href={contactHref}><span class="cur blink" aria-hidden="true">▸</span>Hire me</a>
+          <a class="mi" href="#play"><span class="cur" aria-hidden="true"></span>Play Sheep Run</a>
+          <a class="mi" href="#hats"><span class="cur" aria-hidden="true"></span>Choose a hat</a>
+          <a class="mi" href="#inventory"><span class="cur" aria-hidden="true"></span>Open inventory</a>
+        </nav>
+
+        <div class="stage">
+          <div class="scene">
+            <span class="moon" aria-hidden="true"></span>
+            <span class="spark" style="left:44%;top:10px;background:#F2C14E" aria-hidden="true"></span>
+            <span class="spark" style="left:76%;top:92px;background:#1CBDF5;animation-duration:2s" aria-hidden="true"></span>
+            <span class="spark" style="left:6%;top:128px;background:#FF7AA2;animation-duration:1.7s" aria-hidden="true"></span>
+            <p class="bubble">Baa! {hats.map((h, i) => <span data-hat-only={i}>{h.item}</span>)} on. Try another ↓</p>
+            <span class="hill hill-1" aria-hidden="true"></span>
+            <span class="hill hill-2" aria-hidden="true"></span>
+            <span class="hill hill-3" aria-hidden="true"></span>
+            <Sheep />
+          </div>
+          <div class="hotbar" role="group" aria-label="Equip a hat">
+            {hats.map((h, i) => (
+              <button type="button" class="slot" data-set-hat={i} aria-pressed={i === 0 ? 'true' : 'false'} aria-label={`Equip ${h.item} (${h.name})`}>
+                <svg viewBox="0 0 7 5" shape-rendering="crispEdges" aria-hidden="true">
+                  {hatIcons[i].map((r) => <rect x={r.x} y={r.y} width={r.w} height="1" fill={r.fill} />)}
+                </svg>
+                <span class="k" aria-hidden="true">{i + 1}</span>
+              </button>
+            ))}
+          </div>
+          <p class="equipped">Equipped: {hats.map((h, i) => <span data-hat-only={i}><span class="gold">{h.item}</span> · {h.perk.label}</span>)}</p>
+        </div>
+
+        <aside class="card box" aria-label="Player card">
+          <p class="label pink">Player 1</p>
+          <div>
+            <p class="name">{site.name}</p>
+            <p class="role">Technical Architect · Founder &amp; CTO</p>
+          </div>
+          <p class="bio">I design cloud systems, lead engineering teams and still ship the code.</p>
+          <dl class="stats">
+            <div><dt>GitHub stars</dt><dd class="gold">★{site.stats.stars}</dd></div>
+            <div><dt>Commits</dt><dd class="cyan">{site.stats.commits}</dd></div>
+            <div><dt>Ventures</dt><dd class="pink">{site.stats.ventures}</dd></div>
+            <div><dt>Base</dt><dd>{site.stats.base}</dd></div>
+          </dl>
+        </aside>
+      </div>
+
+      <div class="ticker" aria-hidden="true">
+        <div class="ticker-track">
+          {[0, 1].map(() => <ul>{ticker.map((t) => <li>{t}</li>)}</ul>)}
+        </div>
+      </div>
+    </section>
+
+    <!-- Hats -->
+    <section id="hats" class="section" aria-labelledby="hats-h">
+      <div class="section-head">
+        <h2 id="hats-h" class="h2">Choose your hat</h2>
+        <p class="note">Each hat is a side of my work — and a perk in Sheep Run</p>
+      </div>
+      <div class="hats">
+        <div class="char panel">
+          <div class="char-stage">
+            <p class="bubble">Baa. {hats.map((h, i) => <span data-hat-only={i}>{h.item}</span>)} equipped.</p>
+            <Sheep />
+            <span class="grass" aria-hidden="true"></span>
+          </div>
+          <div class="char-foot">
+            <span>Hey24sheep</span>
+            <span class="cyan">{hats.map((h, i) => <span data-hat-only={i}>{h.item}</span>)}</span>
+          </div>
+        </div>
+
+        <div class="hat-menu panel">
+          <p class="label">Hats · {hats.length} unlocked</p>
+          <div class="hat-list" role="group" aria-label="Choose a hat">
+            {hats.map((h, i) => (
+              <button type="button" class="hat-btn" data-set-hat={i} aria-pressed={i === 0 ? 'true' : 'false'}>
+                <span class="k" aria-hidden="true">{i + 1}</span>{h.name}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div class="detail panel" aria-live="polite">
+          {hats.map((h, i) => (
+            <div data-hat-only={i} class="detail-wrap">
+              <article class="detail-body">
+                <div>
+                  <p class="kicker">Class</p>
+                  <h3>{h.cls}</h3>
+                </div>
+                <p class="muted">{h.desc}</p>
+                <div>
+                  <p class="label">Abilities</p>
+                  <ul class="chips">{h.abilities.map((a) => <li>{a}</li>)}</ul>
+                </div>
+                <div>
+                  <p class="label">Loot</p>
+                  <ul class="loot-list">
+                    {h.loot.map((l) => (
+                      <li><a href={l.url}>{l.name}</a><span class="tag" style={`color:${l.tagColor}`}>{l.tag}</span></li>
+                    ))}
+                  </ul>
+                </div>
+                <div class="perk-row">
+                  <p><span class="label">Sheep Run perk</span><span class="perk">{h.perk.label}</span></p>
+                  <a class="btn-gold" href="#play">Equip &amp; play ▸</a>
+                </div>
+              </article>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Game -->
+    <section id="play" class="section" aria-labelledby="play-h">
+      <div class="section-head">
+        <div>
+          <h2 id="play-h" class="h2">Sheep Run</h2>
+          <p class="muted lede">Dodge the bugs, grab the stars, and unlock my work as loot. You're wearing the {hats.map((h, i) => <span data-hat-only={i} class="gold">{h.item}</span>)}.</p>
+        </div>
+      </div>
+      <SheepRun />
+    </section>
+
+    <!-- Inventory -->
+    <section id="inventory" class="section" aria-labelledby="inv-h">
+      <div class="section-head">
+        <h2 id="inv-h" class="h2">Inventory</h2>
+        <p class="note" data-tab-hint>{inventory[0].hint}</p>
+      </div>
+      <div class="tabs" role="tablist" aria-label="Inventory category" data-tabs hidden>
+        {inventory.map((g, i) => (
+          <button type="button" class="tab" role="tab" id={`tab-${g.id}`} aria-controls={`panel-${g.id}`} aria-selected={i === 0 ? 'true' : 'false'} data-hint={g.hint}>
+            {g.label} <span class="n">{g.items.length}</span>
+          </button>
+        ))}
+      </div>
+      {inventory.map((g) => (
+        <div class="inv-panel" role="tabpanel" id={`panel-${g.id}`} aria-labelledby={`tab-${g.id}`}>
+          <h3 class="panel-title">{g.label}</h3>
+          <div class="items">
+            {g.items.map((it) => (
+              <article class:list={['item', `is-${it.rarity.toLowerCase()}`]}>
+                <div class="item-top">
+                  <span style={`color:${rarityColor[it.rarity]}`}>{it.rarity.toUpperCase()}</span>
+                  {it.status && <span class={`status status-${it.status}`}>{it.status}</span>}
+                </div>
+                <div>
+                  <h4>{it.name}</h4>
+                  {it.role && <p class="role">{it.role}</p>}
+                </div>
+                <p class="desc">{it.desc}</p>
+                <div class="item-foot">
+                  <span class="meta">{it.meta}</span>
+                  {it.links && (
+                    <span class="item-links">
+                      {it.links.map((l) => <a href={l.url} rel={external(l.url) ? 'noopener' : undefined}>{l.label} ▸</a>)}
+                    </span>
+                  )}
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      ))}
+    </section>
+
+    <!-- Contact -->
+    <section id="party" class="section" aria-labelledby="party-h">
+      <div class="party">
+        <div class="copy">
+          <p class="px">Player 2 wanted</p>
+          <h2 id="party-h">Party up?</h2>
+          <p class="lead">Need an architect for your next build, a founder's take on your product, or just want to talk shop? Send a message — or come say hi on Discord.</p>
+        </div>
+        <div class="party-actions">
+          <a class="send" href={contactHref}>Send message <span aria-hidden="true">▸</span></a>
+          <div class="socials">
+            <a href={links.linkedin}>LinkedIn</a>
+            <a href={links.github}>GitHub</a>
+            <a href={links.discord}>Discord</a>
+            <a href={links.twitch}>Twitch</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap foot-inner">
+      <span>© 2026 {site.name}</span>
+      <span class="foot-links">
+        <a href={links.pubdev}>pub.dev</a>
+        <a href={links.marketplace}>VS Marketplace</a>
+        <a href={links.stackoverflow}>Stack Overflow</a>
+        <a href={links.youtube}>YouTube</a>
+      </span>
+      <span class="text">Stay smart, stay creative. <span class="blink" aria-hidden="true">▮</span></span>
+    </div>
+  </footer>
+</Base>
+
+<script>
+  // Inventory tabs (progressive enhancement: without JS every panel is shown).
+  const tablist = document.querySelector<HTMLElement>('[data-tabs]');
+  if (tablist) {
+    const tabs = [...tablist.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    const panels = tabs.map((t) => document.getElementById(t.getAttribute('aria-controls')!)!);
+    const hint = document.querySelector('[data-tab-hint]');
+    const select = (i: number, focus = false) => {
+      tabs.forEach((t, j) => {
+        t.setAttribute('aria-selected', String(i === j));
+        t.tabIndex = i === j ? 0 : -1;
+        panels[j].hidden = i !== j;
+      });
+      if (hint) hint.textContent = tabs[i].dataset.hint ?? '';
+      if (focus) tabs[i].focus();
+    };
+    tabs.forEach((t, i) => {
+      t.addEventListener('click', () => select(i));
+      t.addEventListener('keydown', (e) => {
+        const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (d) { e.preventDefault(); select((i + d + tabs.length) % tabs.length, true); }
+      });
+    });
+    tablist.hidden = false;
+    document.documentElement.classList.add('tabs-ready');
+    select(0);
+  }
+</script>

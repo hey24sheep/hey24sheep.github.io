@@ -1,0 +1,74 @@
+---
+import '../styles/global.css';
+import { site, links } from '../data/content';
+
+interface Props { title?: string; description?: string; noindex?: boolean }
+const { title = site.title, description = site.description, noindex = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, site.url).href;
+const ogImage = new URL('/og.png', site.url).href;
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.name,
+  alternateName: site.handle,
+  url: site.url,
+  jobTitle: 'Technical Architect',
+  worksFor: { '@type': 'Organization', name: 'FeliZeek Technologies' },
+  address: { '@type': 'PostalAddress', addressLocality: 'Delhi', addressCountry: 'IN' },
+  sameAs: [links.github, links.linkedin, links.pubdev, links.marketplace, links.stackoverflow, links.youtube, links.twitch, links.x],
+};
+---
+<!doctype html>
+<html lang="en" data-hat="0">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="theme-color" content="#140A2E" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="hey24sheep.com" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@hey24sheep" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Silkscreen:wght@400;700&display=swap" />
+    <script type="application/ld+json" set:html={JSON.stringify(person)} />
+  </head>
+  <body>
+    <slot />
+    <script>
+      // Shared "equipped hat" state: <html data-hat>, buttons with [data-set-hat].
+      const KEY = 'hey24sheep-hat';
+      const setHat = (i: string, save = true) => {
+        document.documentElement.dataset.hat = i;
+        document.querySelectorAll<HTMLElement>('[data-set-hat]').forEach((b) =>
+          b.setAttribute('aria-pressed', String(b.dataset.setHat === i)),
+        );
+        if (save) {
+          try { localStorage.setItem(KEY, i); } catch { /* storage unavailable */ }
+        }
+      };
+      document.addEventListener('click', (e) => {
+        const b = (e.target as Element).closest<HTMLElement>('[data-set-hat]');
+        if (b?.dataset.setHat) setHat(b.dataset.setHat);
+      });
+      let saved: string | null = null;
+      try { saved = localStorage.getItem(KEY); } catch { /* storage unavailable */ }
+      if (saved && /^[0-5]$/.test(saved)) setHat(saved, false);
+    </script>
+  </body>
+</html>

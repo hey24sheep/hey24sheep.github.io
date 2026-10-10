@@ -1,0 +1,13 @@
+---
+import Base from '../layouts/Base.astro';
+import Sheep from '../components/Sheep.astro';
+---
+<Base title="404 — Bug report filed · Hey24sheep" noindex>
+  <main class="wrap" style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;text-align:center">
+    <Sheep />
+    <p class="px pink" style="margin:0">Error 404</p>
+    <h1 class="h2">This level doesn't exist.</h1>
+    <p class="muted" style="margin:0">The page you're looking for got eaten by a bug.</p>
+    <a class="btn-gold" href="/">▸ Back to the title screen</a>
+  </main>
+</Base>

@@ -1,0 +1,282 @@
+---
+import { hats, gameLoot } from '../data/content';
+---
+<div class="game" data-game>
+  <div class="game-screen">
+    <canvas
+      class="game-canvas"
+      tabindex="0"
+      role="application"
+      aria-label="Sheep Run game"
+      aria-describedby="game-help"
+    ></canvas>
+    <div class="game-hud" aria-hidden="true">
+      <span>Score <b data-score>0000</b></span>
+      <span class="muted">Best <b data-best>0000</b></span>
+      <span class="lives" data-lives></span>
+    </div>
+    <div class="game-perk" aria-hidden="true">
+      {hats.map((h, i) => <span data-hat-only={i}>{h.perk.label}</span>)}
+    </div>
+    <div class="game-toast" data-toast hidden></div>
+    <div class="game-panel" data-panel="ready">
+      <p class="game-panel-title">Sheep Run</p>
+      <p>Dodge the bugs. Grab the stars. Unlock my work.</p>
+      <button type="button" class="game-btn" data-start>Press start</button>
+    </div>
+    <div class="game-panel over" data-panel="over" hidden>
+      <p class="game-panel-title">Bug report filed</p>
+      <p>A bug got through. Score <b data-final>0</b> · Best <b data-final-best>0</b></p>
+      <button type="button" class="game-btn" data-start>Retry</button>
+    </div>
+    <div class="game-panel" data-panel="paused" hidden>
+      <p class="game-panel-title">Paused</p>
+      <button type="button" class="game-btn" data-resume>Resume</button>
+    </div>
+  </div>
+  <div class="loot-shelf">
+    <span class="loot-count px">Loot <b data-loot-count>0</b>/{gameLoot.length}</span>
+    <ul>
+      {gameLoot.map((l) => (
+        <li data-loot={l.id} style={`--c:${l.color}`}>
+          <span class="locked">??? · {l.at} pts</span>
+          <a class="got" href={l.url}>{l.name}</a>
+        </li>
+      ))}
+    </ul>
+  </div>
+  <p id="game-help" class="game-help">Space · ↑ · tap = jump. Bug = 1 pt, star = 5 pts. Your hat's perk is active. Best score is saved on this device.</p>
+  <p class="sr-only" aria-live="polite" data-announce></p>
+</div>
+
+<script>
+  import { hats, gameLoot, BASE_ROWS, LEGS_ALT, PALETTE } from '../data/content';
+
+  const root = document.querySelector<HTMLElement>('[data-game]');
+  if (root) initGame(root);
+
+  function initGame(root: HTMLElement) {
+    const $ = <T extends Element = HTMLElement>(s: string) => root.querySelector<T>(s)!;
+    const canvas = $<HTMLCanvasElement>('canvas');
+    const ctx = canvas.getContext('2d')!;
+    const panels = { ready: $('[data-panel="ready"]'), over: $('[data-panel="over"]'), paused: $('[data-panel="paused"]') };
+    const toastEl = $('[data-toast]');
+    const H = 240, GROUND = 40, SX = 72, STEP = 30;
+    let scale = 1, worldW = 720, dpr = 1;
+
+    const store = {
+      get: (k: string) => { try { return localStorage.getItem(k); } catch { return null; } },
+      set: (k: string, v: string) => { try { localStorage.setItem(k, v); } catch { /* storage unavailable */ } },
+    };
+
+    const sprite = (rows: string[], colors: Record<string, string>) => {
+      const c = document.createElement('canvas');
+      c.width = rows[0].length; c.height = rows.length;
+      const x = c.getContext('2d')!;
+      rows.forEach((row, y) => [...row].forEach((ch, i) => {
+        if (colors[ch]) { x.fillStyle = colors[ch]; x.fillRect(i, y, 1, 1); }
+      }));
+      return c;
+    };
+    const sheepCache = new Map<string, HTMLCanvasElement>();
+    const sheepSprite = (hi: number, frame: number) => {
+      const key = `${hi}-${frame}`;
+      let s = sheepCache.get(key);
+      if (!s) {
+        const hat = hats[hi];
+        const rows = BASE_ROWS.map((row, r) => {
+          const base = frame && r >= 11 ? LEGS_ALT : row;
+          const over = hat.art[r] ?? '';
+          return [...base].map((ch, c) => (over[c] && over[c] !== '.' ? over[c] : ch)).join('');
+        });
+        s = sprite(rows, { ...PALETTE, h: hat.h, H: hat.H });
+        sheepCache.set(key, s);
+      }
+      return s;
+    };
+    const bugSprite = sprite(['.a....a.', '..a..a..', '.pppppp.', 'ppeppepp', '.pppppp.', 'l.l..l.l'], { a: '#BDB3E0', p: '#FF5C7A', e: '#140A2E', l: '#BDB3E0' });
+    const starSprite = sprite(['..y..', '.yyy.', 'yyyyy', '.yyy.', '.y.y.'], { y: '#F2C14E' });
+    const sky = Array.from({ length: 48 }, () => ({ x: Math.random() * 2000, y: 12 + Math.random() * 150, s: Math.random() < 0.2 ? 3 : 2 }));
+
+    const hatIndex = () => {
+      const n = Number(document.documentElement.dataset.hat);
+      return n >= 0 && n < hats.length ? n : 0;
+    };
+    const perk = () => {
+      const p = hats[hatIndex()].perk;
+      return { lives: p.lives ?? 1, speedMul: p.speedMul ?? 1, doubleJump: !!p.doubleJump, bugPts: p.bugPts ?? 1, gravityMul: p.gravityMul ?? 1, starPts: p.starPts ?? 5 };
+    };
+
+    type Mode = 'ready' | 'running' | 'over' | 'paused';
+    const g = {
+      mode: 'ready' as Mode, y: 0, vy: 0, jumps: 0, score: 0, dist: 0, lives: 1, inv: 0, gap: 320,
+      bugs: [] as { x: number; counted: boolean; hit?: boolean }[],
+      stars: [] as { x: number; y: number; got?: boolean }[],
+      best: Number(store.get('hey24sheep-run-best')) || 0,
+    };
+    const unlocked = new Set((store.get('hey24sheep-loot') ?? '').split(',').filter(Boolean));
+    let runId = 0, last = 0, acc = 0, overAt = 0, toastTimer = 0;
+
+    const pad = (n: number) => String(n).padStart(4, '0');
+    const announce = (msg: string) => { $('[data-announce]').textContent = msg; };
+    function hud() {
+      $('[data-score]').textContent = pad(g.score);
+      $('[data-best]').textContent = pad(Math.max(g.best, g.score));
+      $('[data-lives]').innerHTML = '<i></i>'.repeat(Math.max(0, g.mode === 'ready' ? perk().lives : g.lives));
+    }
+    function shelf() {
+      root.querySelectorAll<HTMLElement>('[data-loot]').forEach((li) => li.toggleAttribute('data-got', unlocked.has(li.dataset.loot!)));
+      $('[data-loot-count]').textContent = String(unlocked.size);
+    }
+    function show(mode: Mode) {
+      g.mode = mode;
+      (Object.keys(panels) as (keyof typeof panels)[]).forEach((k) => { panels[k].hidden = k !== mode; });
+    }
+    function toast(name: string, color: string) {
+      toastEl.textContent = `Loot unlocked ▸ ${name}`;
+      toastEl.style.setProperty('--c', color);
+      toastEl.hidden = false;
+      clearTimeout(toastTimer);
+      toastTimer = window.setTimeout(() => { toastEl.hidden = true; }, 2400);
+      announce(`Loot unlocked: ${name}`);
+    }
+
+    function loop(id: number) {
+      const frame = (now: number) => {
+        if (id !== runId || g.mode !== 'running') return;
+        acc += Math.min(now - last, 100);
+        last = now;
+        while (acc >= STEP && g.mode === 'running') { tick(); acc -= STEP; }
+        draw();
+        if (g.mode === 'running') requestAnimationFrame(frame);
+      };
+      last = performance.now(); acc = 0;
+      requestAnimationFrame(frame);
+    }
+    function start() {
+      const k = perk();
+      Object.assign(g, { y: 0, vy: 0, jumps: 0, score: 0, dist: 0, lives: k.lives, inv: 0, gap: 320, bugs: [{ x: worldW + 40, counted: false }], stars: [] });
+      show('running');
+      hud();
+      canvas.focus({ preventScroll: true });
+      loop(++runId);
+    }
+    function resume() {
+      show('running');
+      canvas.focus({ preventScroll: true });
+      loop(++runId);
+    }
+    function pause() { if (g.mode === 'running') show('paused'); }
+    function over() {
+      show('over');
+      overAt = performance.now();
+      if (g.score > g.best) { g.best = g.score; store.set('hey24sheep-run-best', String(g.best)); }
+      $('[data-final]').textContent = String(g.score);
+      $('[data-final-best]').textContent = String(g.best);
+      hud();
+      announce(`Game over. Score ${g.score}.`);
+    }
+    function press() {
+      if (g.mode === 'running') {
+        const k = perk();
+        if (g.y <= 0.01) { g.vy = 15.5; g.jumps = 1; }
+        else if (k.doubleJump && g.jumps < 2) { g.vy = 13; g.jumps = 2; }
+      } else if (g.mode === 'paused') resume();
+      else if (performance.now() - overAt > 400) start();
+    }
+
+    function tick() {
+      const k = perk();
+      const speed = (6.5 + Math.min(6, g.score * 0.07)) * k.speedMul;
+      g.dist += speed;
+      g.y += g.vy; g.vy -= 1.15 * k.gravityMul;
+      if (g.y <= 0) { g.y = 0; g.vy = 0; g.jumps = 0; }
+      g.bugs.forEach((b) => { b.x -= speed; });
+      g.stars.forEach((s) => { s.x -= speed; });
+      const spawnX = worldW + 20;
+      const lastBug = g.bugs[g.bugs.length - 1];
+      if (!lastBug || spawnX - lastBug.x > g.gap) {
+        const x = spawnX + Math.random() * 40;
+        g.bugs.push({ x, counted: false });
+        g.gap = 260 + Math.random() * 240 + speed * 12;
+        if (Math.random() < 0.55) g.stars.push({ x: x + g.gap * 0.5, y: 60 + Math.random() * 50 });
+      }
+      const x0 = SX + 10, x1 = SX + 56, y0 = g.y, y1 = g.y + 34;
+      for (const b of g.bugs) {
+        if (!b.hit && g.inv === 0 && x1 > b.x + 4 && x0 < b.x + 28 && y0 < 18) {
+          b.hit = true; g.lives -= 1;
+          if (g.lives <= 0) { over(); return; }
+          g.inv = 40;
+        }
+        if (!b.counted && b.x + 32 < SX) { b.counted = true; if (!b.hit) g.score += k.bugPts; }
+      }
+      for (const s of g.stars) {
+        if (!s.got && x1 > s.x && x0 < s.x + 20 && y1 > s.y && y0 < s.y + 20) { s.got = true; g.score += k.starPts; }
+      }
+      g.bugs = g.bugs.filter((b) => b.x > -40 && !b.hit);
+      g.stars = g.stars.filter((s) => s.x > -30 && !s.got);
+      if (g.inv > 0) g.inv -= 1;
+      for (const L of gameLoot) {
+        if (g.score >= L.at && !unlocked.has(L.id)) {
+          unlocked.add(L.id);
+          store.set('hey24sheep-loot', [...unlocked].join(','));
+          shelf();
+          toast(L.name, L.color);
+        }
+      }
+      hud();
+    }
+
+    function draw() {
+      ctx.setTransform(dpr * scale, 0, 0, dpr * scale, 0, 0);
+      ctx.imageSmoothingEnabled = false;
+      const top = H - GROUND;
+      ctx.fillStyle = '#22144A'; ctx.fillRect(0, 0, worldW, H);
+      ctx.fillStyle = '#BDB3E0';
+      for (const s of sky) {
+        const x = (((s.x - g.dist * 0.15) % 2000) + 2000) % 2000;
+        if (x < worldW) ctx.fillRect(Math.round(x), s.y, s.s, s.s);
+      }
+      ctx.fillStyle = '#2B1B5A'; ctx.fillRect(0, top, worldW, GROUND);
+      ctx.fillStyle = '#4A3A85'; ctx.fillRect(0, top, worldW, 3);
+      ctx.fillStyle = '#1CBDF5';
+      for (let x = -(g.dist % 32); x < worldW; x += 32) ctx.fillRect(x, top + 14, 16, 6);
+      for (const s of g.stars) ctx.drawImage(starSprite, s.x, top - s.y - 20, 20, 20);
+      for (const b of g.bugs) ctx.drawImage(bugSprite, b.x, top - 24, 32, 24);
+      const frame = g.mode === 'running' && g.y <= 0 ? Math.floor(g.dist / 22) % 2 : 0;
+      ctx.globalAlpha = g.inv > 0 && Math.floor(g.inv / 4) % 2 ? 0.35 : 1;
+      ctx.drawImage(sheepSprite(hatIndex(), frame), SX, top - 52 - g.y, 64, 52);
+      ctx.globalAlpha = 1;
+    }
+    function resize() {
+      const r = canvas.getBoundingClientRect();
+      if (!r.width || !r.height) return;
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.round(r.width * dpr);
+      canvas.height = Math.round(r.height * dpr);
+      scale = r.height / H;
+      worldW = r.width / scale;
+      draw();
+    }
+
+    canvas.addEventListener('pointerdown', (e) => {
+      if (e.button > 0) return;
+      e.preventDefault();
+      canvas.focus({ preventScroll: true });
+      press();
+    });
+    canvas.addEventListener('keydown', (e) => {
+      if ([' ', 'ArrowUp', 'w', 'W', 'Enter'].includes(e.key)) { e.preventDefault(); press(); }
+      else if (e.key === 'Escape' || e.key === 'p' || e.key === 'P') pause();
+    });
+    root.querySelectorAll('[data-start]').forEach((b) => b.addEventListener('click', start));
+    $('[data-resume]').addEventListener('click', resume);
+    document.addEventListener('visibilitychange', () => { if (document.hidden) pause(); });
+    new IntersectionObserver(([e]) => { if (!e.isIntersecting) pause(); }, { threshold: 0.25 }).observe(canvas);
+    new MutationObserver(() => { hud(); if (g.mode !== 'running') draw(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-hat'] });
+    new ResizeObserver(resize).observe(canvas);
+
+    shelf();
+    hud();
+  }
+</script>
