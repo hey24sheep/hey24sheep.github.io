@@ -1,0 +1,16 @@
+---
+// Pixel sheep wearing every hat; CSS shows only the equipped one (see [data-hat-only]).
+import { BASE_ROWS, PALETTE, pixelRuns } from '../data/hats';
+import { hats } from '../data/profile';
+
+interface Props { class?: string }
+const { class: cls } = Astro.props;
+const body = pixelRuns(BASE_ROWS, PALETTE);
+const hatRuns = hats.map((h) => pixelRuns(h.art, { h: h.h, H: h.H }));
+---
+<svg class:list={['sheep', cls]} viewBox="0 0 16 13" shape-rendering="crispEdges" aria-hidden="true">
+  {body.map((r) => <rect x={r.x} y={r.y} width={r.w} height="1" fill={r.fill} />)}
+  {hatRuns.map((runs, i) => (
+    <g data-hat-only={i}>{runs.map((r) => <rect x={r.x} y={r.y} width={r.w} height="1" fill={r.fill} />)}</g>
+  ))}
+</svg>
