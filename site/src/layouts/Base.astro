@@ -1,7 +1,7 @@
 ---
 import '../styles/global.css';
 import { site } from '../data/site';
-import { handle, hats, title as defaultTitle, description as defaultDescription, sameAs } from '../data/profile';
+import { handle, hats, title as defaultTitle, description as defaultDescription, sameAs, email, currentJob, ventureList, personDescription, allLinks } from '../data/profile';
 
 interface Props { title?: string; description?: string; noindex?: boolean }
 const { title = defaultTitle, description = defaultDescription, noindex = false } = Astro.props;
@@ -9,17 +9,34 @@ const canonical = new URL(Astro.url.pathname, site.url).href;
 const ogImage = new URL('/og.png', site.url).href;
 // Only the equipped hat's [data-hat-only] elements are shown.
 const hatCss = hats.map((_, i) => `:root[data-hat="${i}"] [data-hat-only]:not([data-hat-only="${i}"])`).join(',') + '{display:none}';
-const person = {
+const home = `${site.url}/`;
+const personId = `${home}#person`;
+const knowsAbout = [...new Set([...site.expertise, ...hats.flatMap((h) => h.abilities)])];
+const structuredData = {
   '@context': 'https://schema.org',
-  '@type': 'Person',
-  name: site.name,
-  alternateName: handle,
-  url: site.url,
-  jobTitle: 'Technical Architect',
-  worksFor: { '@type': 'Organization', name: 'FeliZeek Technologies' },
-  address: { '@type': 'PostalAddress', addressLocality: 'Delhi', addressCountry: 'IN' },
-  sameAs,
+  '@graph': [
+    { '@type': 'WebSite', '@id': `${home}#website`, url: home, name: handle, alternateName: site.name, inLanguage: 'en', publisher: { '@id': personId } },
+    { '@type': 'ProfilePage', '@id': `${home}#profile`, url: home, name: defaultTitle, description: defaultDescription, inLanguage: 'en', isPartOf: { '@id': `${home}#website` }, about: { '@id': personId }, mainEntity: { '@id': personId }, dateModified: new Date().toISOString() },
+    {
+      '@type': 'Person',
+      '@id': personId,
+      name: site.name,
+      alternateName: [handle, handle.toLowerCase()],
+      url: home,
+      image: new URL('/android-chrome-512x512.png', site.url).href,
+      description: personDescription,
+      jobTitle: site.jobTitle,
+      ...(email && { email: `mailto:${email}` }),
+      knowsAbout,
+      hasOccupation: { '@type': 'Occupation', name: site.jobTitle, skills: site.expertise.join(', '), occupationLocation: { '@type': 'City', name: 'Delhi' } },
+      ...(currentJob && { worksFor: { '@type': 'Organization', name: currentJob.name, ...(currentJob.links[0] && { url: currentJob.links[0].url }) } }),
+      address: { '@type': 'PostalAddress', addressLocality: 'Delhi', addressCountry: 'IN' },
+      sameAs,
+    },
+    ...ventureList.map((v) => ({ '@type': 'Organization', '@id': `${v.url ?? home}#org`, name: v.name, ...(v.url && { url: v.url }), description: v.desc, founder: { '@id': personId } })),
+  ],
 };
+const meLinks = allLinks.filter((l) => /^https?:/.test(l.url) && !l.url.startsWith(site.url));
 ---
 <!doctype html>
 <html lang="en" data-hat="0">
@@ -29,7 +46,8 @@ const person = {
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="robots" content={noindex ? 'noindex' : 'index, follow, max-image-preview:large, max-snippet:-1'} />
+    <meta name="author" content={site.name} />
     <meta name="theme-color" content="#140A2E" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
@@ -40,17 +58,26 @@ const person = {
     <meta property="og:url" content={canonical} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
+    <meta property="og:locale" content="en_IN" />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${handle} — ${site.name}, ${site.jobTitle}`} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@hey24sheep" />
+    <meta name="twitter:creator" content="@hey24sheep" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={`${handle} — ${site.name}, ${site.jobTitle}`} />
+    <link rel="sitemap" href="/sitemap.xml" />
+    {meLinks.map((l) => <link rel="me" href={l.url} />)}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Silkscreen:wght@400;700&display=swap" />
     <style is:inline set:html={hatCss}></style>
-    <script type="application/ld+json" set:html={JSON.stringify(person)} />
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
   </head>
   <body>
     <slot />

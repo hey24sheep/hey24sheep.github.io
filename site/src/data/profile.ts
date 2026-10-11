@@ -204,5 +204,19 @@ export const gameLoot = [...ossPick, ...[...ventures].reverse()].slice(0, thresh
   url: it.links[0]?.url ?? site.url,
 }));
 
-export const title = `${handle} — ${site.name} · ${tagline.join(', ')}`;
-export const description = `${site.name} (${handle}) — ${role}. ${bioShort}`.slice(0, 160);
+// SEO
+export const years = Math.floor((Date.now() - Date.parse(site.careerStart)) / (365.25 * 24 * 3600 * 1000));
+export const currentJob = corp.find((c) => !c.status);
+export const ventureList = ventures.map((v) => ({ name: v.name, url: v.links[0]?.url, desc: v.desc, role: v.role }));
+const andList = (xs: string[]) => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs.at(-1)}`);
+const summary = `${site.jobTitle} with ${years}+ years of experience in ${site.focus}.`;
+const founderOf = ventures.length ? `${ventures[0].role} of ${andList(ventures.map((v) => v.name))}` : '';
+export const title = `${site.name} — ${site.jobTitle} | ${handle}`;
+// First variant that fits Google's ~160-character snippet.
+export const description = [
+  `${site.name} (${handle}): ${summary}${founderOf ? ` ${founderOf}.` : ''}`,
+  `${site.jobTitle} with ${years}+ years in ${site.focus}. ${site.name} (${handle})${founderOf ? `, ${founderOf}` : ''}.`,
+  `${site.name} (${handle}): ${summary}`,
+  summary,
+].find((d) => d.length <= 160) ?? summary.slice(0, 160);
+export const personDescription = `${summary}${founderOf ? ` ${founderOf}.` : ''} ${bioShort}`;
