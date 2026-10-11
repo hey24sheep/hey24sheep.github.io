@@ -1,21 +1,24 @@
 ---
 import '../styles/global.css';
-import { site, links } from '../data/content';
+import { site } from '../data/site';
+import { handle, hats, title as defaultTitle, description as defaultDescription, sameAs } from '../data/profile';
 
 interface Props { title?: string; description?: string; noindex?: boolean }
-const { title = site.title, description = site.description, noindex = false } = Astro.props;
+const { title = defaultTitle, description = defaultDescription, noindex = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, site.url).href;
 const ogImage = new URL('/og.png', site.url).href;
+// Only the equipped hat's [data-hat-only] elements are shown.
+const hatCss = hats.map((_, i) => `:root[data-hat="${i}"] [data-hat-only]:not([data-hat-only="${i}"])`).join(',') + '{display:none}';
 const person = {
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: site.name,
-  alternateName: site.handle,
+  alternateName: handle,
   url: site.url,
   jobTitle: 'Technical Architect',
   worksFor: { '@type': 'Organization', name: 'FeliZeek Technologies' },
   address: { '@type': 'PostalAddress', addressLocality: 'Delhi', addressCountry: 'IN' },
-  sameAs: [links.github, links.linkedin, links.pubdev, links.marketplace, links.stackoverflow, links.youtube, links.twitch, links.x],
+  sameAs,
 };
 ---
 <!doctype html>
@@ -46,6 +49,7 @@ const person = {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Silkscreen:wght@400;700&display=swap" />
+    <style is:inline set:html={hatCss}></style>
     <script type="application/ld+json" set:html={JSON.stringify(person)} />
   </head>
   <body>
@@ -68,7 +72,7 @@ const person = {
       });
       let saved: string | null = null;
       try { saved = localStorage.getItem(KEY); } catch { /* storage unavailable */ }
-      if (saved && /^[0-5]$/.test(saved)) setHat(saved, false);
+      if (saved && document.querySelector(`[data-set-hat="${CSS.escape(saved)}"]`)) setHat(saved, false);
     </script>
   </body>
 </html>

@@ -1,5 +1,6 @@
 ---
-import { hats, gameLoot } from '../data/content';
+import { hats, gameLoot } from '../data/profile';
+const gameData = { hats: hats.map(({ name, h, H, art, perk }) => ({ name, h, H, art, perk })), loot: gameLoot };
 ---
 <div class="game" data-game>
   <div class="game-screen">
@@ -47,16 +48,21 @@ import { hats, gameLoot } from '../data/content';
   </div>
   <p id="game-help" class="game-help">Space · ↑ · tap = jump. Bug = 1 pt, star = 5 pts. Your hat's perk is active. Best score is saved on this device.</p>
   <p class="sr-only" aria-live="polite" data-announce></p>
+  <script type="application/json" data-game-data set:html={JSON.stringify(gameData)} is:inline></script>
 </div>
 
 <script>
-  import { hats, gameLoot, BASE_ROWS, LEGS_ALT, PALETTE } from '../data/content';
+  import { BASE_ROWS, LEGS_ALT, PALETTE, type Perk } from '../data/hats';
+
+  type GameHat = { name: string; h: string; H: string; art: string[]; perk: Perk };
+  type GameLoot = { id: string; name: string; at: number; color: string; url: string };
 
   const root = document.querySelector<HTMLElement>('[data-game]');
   if (root) initGame(root);
 
   function initGame(root: HTMLElement) {
     const $ = <T extends Element = HTMLElement>(s: string) => root.querySelector<T>(s)!;
+    const { hats, loot: gameLoot } = JSON.parse($('[data-game-data]').textContent!) as { hats: GameHat[]; loot: GameLoot[] };
     const canvas = $<HTMLCanvasElement>('canvas');
     const ctx = canvas.getContext('2d')!;
     const panels = { ready: $('[data-panel="ready"]'), over: $('[data-panel="over"]'), paused: $('[data-panel="paused"]') };

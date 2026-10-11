@@ -34,13 +34,7 @@ button { font: inherit; color: inherit; }
 .wrap { max-width: 1240px; margin: 0 auto; padding-inline: clamp(16px, 4vw, 40px); }
 section[id] { scroll-margin-top: 84px; }
 
-/* Equipped hat: only the matching [data-hat-only] element is shown. */
-:root[data-hat="0"] [data-hat-only]:not([data-hat-only="0"]),
-:root[data-hat="1"] [data-hat-only]:not([data-hat-only="1"]),
-:root[data-hat="2"] [data-hat-only]:not([data-hat-only="2"]),
-:root[data-hat="3"] [data-hat-only]:not([data-hat-only="3"]),
-:root[data-hat="4"] [data-hat-only]:not([data-hat-only="4"]),
-:root[data-hat="5"] [data-hat-only]:not([data-hat-only="5"]) { display: none; }
+/* Equipped-hat visibility rules are generated per hat in layouts/Base.astro. */
 
 /* Header */
 .hud { position: sticky; top: 0; z-index: 20; background: rgba(16, 7, 42, 0.94); border-bottom: 3px solid #2e1e5e; }
@@ -252,9 +246,8 @@ section[id] { scroll-margin-top: 84px; }
 .item.is-legendary { border-color: var(--gold); }
 .item.is-unique { border-color: var(--pink); }
 .item-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-family: var(--pixel); font-size: 12px; }
-.status { padding: 3px 8px; color: var(--bg); }
-.status-Retired { background: var(--faint); }
-.status-Previous { background: var(--muted); }
+.status { padding: 3px 8px; color: var(--bg); background: var(--muted); }
+.status.retired { background: var(--faint); }
 .item h4 { margin: 0; font-size: 23px; line-height: 1.2; font-weight: 700; overflow-wrap: anywhere; }
 .item .role { margin: 2px 0 0; font-weight: 600; color: var(--cyan); }
 .item .desc { margin: 0; font-size: 16px; color: var(--muted); }

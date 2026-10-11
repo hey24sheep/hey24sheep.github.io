@@ -2,10 +2,13 @@
 import Base from '../layouts/Base.astro';
 import Sheep from '../components/Sheep.astro';
 import SheepRun from '../components/SheepRun.astro';
-import { site, links, contactHref, hats, inventory, ticker, pixelRuns, rarityColor } from '../data/content';
+import { site } from '../data/site';
+import { pixelRuns, rarityColor } from '../data/hats';
+import { handle, tagline, bio, role, stats, hats, inventory, ticker, contactHref, partyLinks, footerLinks, signoff } from '../data/profile';
 
 const hatIcons = hats.map((h) => pixelRuns(h.art, { h: h.h, H: h.H }, 9));
 const external = (url: string) => /^https?:/.test(url);
+const handleParts = handle.split(/(\d+)/).filter(Boolean);
 ---
 <Base>
   <header class="hud">
@@ -18,8 +21,8 @@ const external = (url: string) => /^https?:/.test(url);
         <a href="#party">Party up</a>
       </div>
       <div class="hud-stats">
-        <span><span class="gold" aria-hidden="true">★</span> {site.stats.stars}<span class="sr-only"> GitHub stars</span></span>
-        <span><span class="cyan">XP</span> {site.stats.commits}<span class="sr-only"> commits</span></span>
+        <span><span class="gold" aria-hidden="true">★</span> {stats.stars}<span class="sr-only"> GitHub stars</span></span>
+        <span><span class="cyan">XP</span> {stats.commits}<span class="sr-only"> commits</span></span>
       </div>
     </nav>
   </header>
@@ -29,8 +32,8 @@ const external = (url: string) => /^https?:/.test(url);
     <section class="title" aria-labelledby="title-h">
       <div class="title-head">
         <p class="presents px">{site.name} presents</p>
-        <h1 id="title-h" class="wordmark">Hey<span class="n">24</span>sheep<span class="sr-only"> — {site.name}, technical architect and founder</span></h1>
-        <p class="tagline">Architect <span class="sep" aria-hidden="true">|</span> Founder <span class="sep" aria-hidden="true">|</span> <span class="many">And Many Other Hats</span></p>
+        <h1 id="title-h" class="wordmark">{handleParts.map((p) => (/^\d+$/.test(p) ? <span class="n">{p}</span> : p))}<span class="sr-only"> — {site.name}, {role}</span></h1>
+        <p class="tagline">{tagline.map((t, i) => (<>{i > 0 && <span class="sep" aria-hidden="true"> | </span>}<span class={i === tagline.length - 1 && tagline.length > 1 ? 'many' : undefined}>{t}</span></>))}</p>
       </div>
 
       <div class="lobby">
@@ -71,14 +74,14 @@ const external = (url: string) => /^https?:/.test(url);
           <p class="label pink">Player 1</p>
           <div>
             <p class="name">{site.name}</p>
-            <p class="role">Technical Architect · Founder &amp; CTO</p>
+            <p class="role">{role}</p>
           </div>
-          <p class="bio">I design cloud systems, lead engineering teams and still ship the code.</p>
+          <p class="bio">{bio}</p>
           <dl class="stats">
-            <div><dt>GitHub stars</dt><dd class="gold">★{site.stats.stars}</dd></div>
-            <div><dt>Commits</dt><dd class="cyan">{site.stats.commits}</dd></div>
-            <div><dt>Ventures</dt><dd class="pink">{site.stats.ventures}</dd></div>
-            <div><dt>Base</dt><dd>{site.stats.base}</dd></div>
+            <div><dt>GitHub stars</dt><dd class="gold">★{stats.stars}</dd></div>
+            <div><dt>Commits</dt><dd class="cyan">{stats.commits}</dd></div>
+            <div><dt>Ventures</dt><dd class="pink">{stats.ventures}</dd></div>
+            <div><dt>Base</dt><dd>{stats.base}</dd></div>
           </dl>
         </aside>
       </div>
@@ -137,7 +140,7 @@ const external = (url: string) => /^https?:/.test(url);
                   <p class="label">Loot</p>
                   <ul class="loot-list">
                     {h.loot.map((l) => (
-                      <li><a href={l.url}>{l.name}</a><span class="tag" style={`color:${l.tagColor}`}>{l.tag}</span></li>
+                      <li><a href={l.url}>{l.label}</a>{l.tag && <span class="tag" style={`color:${l.tagColor}`}>{l.tag}</span>}</li>
                     ))}
                   </ul>
                 </div>
@@ -184,7 +187,7 @@ const external = (url: string) => /^https?:/.test(url);
               <article class:list={['item', `is-${it.rarity.toLowerCase()}`]}>
                 <div class="item-top">
                   <span style={`color:${rarityColor[it.rarity]}`}>{it.rarity.toUpperCase()}</span>
-                  {it.status && <span class={`status status-${it.status}`}>{it.status}</span>}
+                  {it.status && <span class:list={['status', { retired: /retired/i.test(it.status) }]}>{it.status}</span>}
                 </div>
                 <div>
                   <h4>{it.name}</h4>
@@ -217,10 +220,7 @@ const external = (url: string) => /^https?:/.test(url);
         <div class="party-actions">
           <a class="send" href={contactHref}>Send message <span aria-hidden="true">▸</span></a>
           <div class="socials">
-            <a href={links.linkedin}>LinkedIn</a>
-            <a href={links.github}>GitHub</a>
-            <a href={links.discord}>Discord</a>
-            <a href={links.twitch}>Twitch</a>
+            {partyLinks.map((l) => <a href={l.url}>{l.label}</a>)}
           </div>
         </div>
       </div>
@@ -231,12 +231,9 @@ const external = (url: string) => /^https?:/.test(url);
     <div class="wrap foot-inner">
       <span>© 2026 {site.name}</span>
       <span class="foot-links">
-        <a href={links.pubdev}>pub.dev</a>
-        <a href={links.marketplace}>VS Marketplace</a>
-        <a href={links.stackoverflow}>Stack Overflow</a>
-        <a href={links.youtube}>YouTube</a>
+        {footerLinks.map((l) => <a href={l.url}>{l.label}</a>)}
       </span>
-      <span class="text">Stay smart, stay creative. <span class="blink" aria-hidden="true">▮</span></span>
+      <span class="text">{signoff} <span class="blink" aria-hidden="true">▮</span></span>
     </div>
   </footer>
 </Base>
