@@ -263,6 +263,11 @@ section[id] { scroll-margin-top: 84px; }
 .party p { margin: 0; }
 .party h2 { margin: 0; font-size: clamp(40px, 6vw, 76px); line-height: 0.95; font-weight: 700; }
 .party .lead { max-width: 540px; font-size: 19px; color: #2a0e2a; }
+.email-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-top: 6px !important; }
+.email { font-family: var(--pixel); font-size: clamp(14px, 2.2vw, 18px); color: var(--bg); border-bottom: 3px solid var(--bg); overflow-wrap: anywhere; }
+.email:hover { color: #2a0e2a; }
+.copy-btn { min-height: 36px; padding: 0 12px; background: transparent; border: 3px solid var(--bg); color: var(--bg); font-family: var(--pixel); font-size: 12px; cursor: pointer; }
+.copy-btn:hover { background: var(--bg); color: var(--pink); }
 .party-actions { display: flex; flex-direction: column; gap: 12px; }
 .send { display: flex; align-items: center; justify-content: space-between; min-height: 56px; padding: 0 20px; background: var(--bg); color: var(--text); font-family: var(--pixel); font-size: 15px; box-shadow: 5px 5px 0 var(--shadow); }
 .send:hover { color: var(--gold); }

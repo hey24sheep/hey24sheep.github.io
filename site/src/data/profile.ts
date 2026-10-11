@@ -19,6 +19,7 @@ function text(tokens: Token[] = []): string {
     .map((t) => {
       if ('tokens' in t && t.tokens) return text(t.tokens);
       if (t.type === 'br') return ' ';
+      if (t.type === 'html') return '';
       return 'text' in t ? decode(t.text) : '';
     })
     .join('');
@@ -51,7 +52,10 @@ const fail = (msg: string): never => { throw new Error(`[profile README] ${msg}`
 const introParas = paragraphs(intro);
 const taglinePara = introParas.find((p) => p.tokens.length === 1 && p.tokens[0].type === 'strong') ?? fail('missing the bold tagline under the title');
 export const tagline = text(taglinePara.tokens).split('|').map((s) => s.trim()).filter(Boolean);
-export const bio = text(introParas.find((p) => p !== taglinePara)?.tokens).trim();
+const isLinkRow = (p: Tokens.Paragraph) => !text(p.tokens.filter((t) => t.type !== 'link' && t.type !== 'image')).replace(/[\s·|•]/g, '');
+export const bio = text(introParas.find((p) => p !== taglinePara && !isLinkRow(p))?.tokens).trim();
+// Bio without a leading "I'm <name>." (the site already shows the name next to it).
+export const bioShort = bio.replace(/^I['’]m [^.]+\.\s*/, '') || bio;
 export { handle };
 
 type Row = Record<string, { text: string; links: Link[] }>;
@@ -139,7 +143,7 @@ const hatDrafts: { name: string; cls: string; desc: string; abilities: string[];
 for (const t of section(/hats/i)) {
   const cur = hatDrafts.at(-1);
   if (t.type === 'heading' && (t as Tokens.Heading).depth === 3) {
-    const [name, cls] = text((t as Tokens.Heading).tokens).split(/\s+[·|—–]\s+/).map((s) => s.trim());
+    const [name, cls] = text((t as Tokens.Heading).tokens).replace(/^[^\p{L}\p{N}]+/u, '').split(/\s+[·|—–]\s+/).map((s) => s.trim());
     hatDrafts.push({ name, cls: cls || name, desc: '', abilities: [], loot: [] });
   } else if (cur && t.type === 'paragraph') {
     const ts = (t as Tokens.Paragraph).tokens;
@@ -167,6 +171,7 @@ export const hats: Hat[] = hatDrafts.map((h) => ({ ...(HAT_STYLES[h.name.toLower
 export const allLinks = section(/reach|contact|links/i).flatMap((t) => (t.type === 'paragraph' ? links((t as Tokens.Paragraph).tokens) : []));
 const byLabel = (re: RegExp) => allLinks.find((l) => re.test(l.label));
 const mail = allLinks.find((l) => l.url.startsWith('mailto:'));
+export const email = mail?.url.replace(/^mailto:/, '') || site.email;
 export const contactHref = mail?.url ?? (site.email ? `mailto:${site.email}` : byLabel(/linkedin/i)?.url ?? site.url);
 export const partyLinks = [/linkedin/i, /github/i, /discord/i, /twitch/i].map(byLabel).filter((l): l is Link => !!l);
 const isExternal = (url: string) => { try { return /^https?:$/.test(new URL(url).protocol) && new URL(url).hostname !== new URL(site.url).hostname; } catch { return false; } };
@@ -200,4 +205,4 @@ export const gameLoot = [...ossPick, ...[...ventures].reverse()].slice(0, thresh
 }));
 
 export const title = `${handle} — ${site.name} · ${tagline.join(', ')}`;
-export const description = `${site.name} (${handle}): ${bio}`.slice(0, 160);
+export const description = `${site.name} (${handle}) — ${role}. ${bioShort}`.slice(0, 160);

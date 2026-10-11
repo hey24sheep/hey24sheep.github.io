@@ -4,7 +4,7 @@ import Sheep from '../components/Sheep.astro';
 import SheepRun from '../components/SheepRun.astro';
 import { site } from '../data/site';
 import { pixelRuns, rarityColor } from '../data/hats';
-import { handle, tagline, bio, role, stats, hats, inventory, ticker, contactHref, partyLinks, footerLinks, signoff } from '../data/profile';
+import { handle, tagline, bioShort, role, stats, hats, inventory, ticker, contactHref, email, partyLinks, footerLinks, signoff } from '../data/profile';
 
 const hatIcons = hats.map((h) => pixelRuns(h.art, { h: h.h, H: h.H }, 9));
 const external = (url: string) => /^https?:/.test(url);
@@ -76,7 +76,7 @@ const handleParts = handle.split(/(\d+)/).filter(Boolean);
             <p class="name">{site.name}</p>
             <p class="role">{role}</p>
           </div>
-          <p class="bio">{bio}</p>
+          <p class="bio">{bioShort}</p>
           <dl class="stats">
             <div><dt>GitHub stars</dt><dd class="gold">★{stats.stars}</dd></div>
             <div><dt>Commits</dt><dd class="cyan">{stats.commits}</dd></div>
@@ -216,6 +216,12 @@ const handleParts = handle.split(/(\d+)/).filter(Boolean);
           <p class="px">Player 2 wanted</p>
           <h2 id="party-h">Party up?</h2>
           <p class="lead">Need an architect for your next build, a founder's take on your product, or just want to talk shop? Send a message — or come say hi on Discord.</p>
+          {email && (
+            <p class="email-row">
+              <a class="email" href={`mailto:${email}`}>{email}</a>
+              <button type="button" class="copy-btn" data-copy={email}>Copy</button>
+            </p>
+          )}
         </div>
         <div class="party-actions">
           <a class="send" href={contactHref}>Send message <span aria-hidden="true">▸</span></a>
@@ -239,6 +245,19 @@ const handleParts = handle.split(/(\d+)/).filter(Boolean);
 </Base>
 
 <script>
+  // Copy-to-clipboard for the email address.
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((b) =>
+    b.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(b.dataset.copy!);
+        b.textContent = 'Copied!';
+      } catch {
+        b.textContent = 'Press Ctrl+C';
+      }
+      setTimeout(() => { b.textContent = 'Copy'; }, 2000);
+    }),
+  );
+
   // Inventory tabs (progressive enhancement: without JS every panel is shown).
   const tablist = document.querySelector<HTMLElement>('[data-tabs]');
   if (tablist) {
