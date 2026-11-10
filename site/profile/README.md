@@ -93,15 +93,6 @@ AI video, generative art, games and streams.
 
 </details>
 
-## 🚀 Products
-
-| Product | Role | About | Status |
-| --- | --- | --- | --- |
-| [Cuscato](https://cuscato.com) | Founder & CTO | Zero-commission storefronts and bookings | |
-| [Neettech](http://neettech.in) | Founder & CTO | Anonymous social network | |
-| Text Is Speech | Creator | Text-to-speech app | Retired |
-| Height Predictor | Creator | Height-prediction app | Retired |
-
 ## 🧰 Open source
 
 | Project | About | Stars |
@@ -110,12 +101,18 @@ AI video, generative art, games and streams.
 | [aio-sdcard-doctor](https://github.com/hey24sheep/aio-sdcard-doctor) | Rescue photos from failing SD cards | ![stars](https://img.shields.io/github/stars/hey24sheep/aio-sdcard-doctor?style=flat-square&label=%E2%98%85&color=1CBDF5) |
 | [azure-flutter-tasks](https://github.com/hey24sheep/azure-flutter-tasks) | Flutter tasks for Azure DevOps | ![stars](https://img.shields.io/github/stars/hey24sheep/azure-flutter-tasks?style=flat-square&label=%E2%98%85&color=F2C14E) |
 | [uiblock](https://github.com/hey24sheep/uiblock) | Block UI in Flutter apps | ![stars](https://img.shields.io/github/stars/hey24sheep/uiblock?style=flat-square&label=%E2%98%85&color=1CBDF5) |
-| [LSystem_Fractal_Trees_P5](https://github.com/hey24sheep/LSystem_Fractal_Trees_P5) | L-system fractal trees in p5.js | ![stars](https://img.shields.io/github/stars/hey24sheep/LSystem_Fractal_Trees_P5?style=flat-square&label=%E2%98%85&color=1CBDF5) |
 | [backdrop_modal_route](https://github.com/hey24sheep/backdrop_modal_route) | Backdrop modal routes for Flutter | ![stars](https://img.shields.io/github/stars/hey24sheep/backdrop_modal_route?style=flat-square&label=%E2%98%85&color=1CBDF5) |
 | [azure-environment-variables](https://github.com/hey24sheep/azure-environment-variables) | Env-variable task for Azure DevOps | ![stars](https://img.shields.io/github/stars/hey24sheep/azure-environment-variables?style=flat-square&label=%E2%98%85&color=BDB3E0) |
-| [dotnetkiteconnect](https://github.com/hey24sheep/dotnetkiteconnect) | .NET library for Kite Connect | ![stars](https://img.shields.io/github/stars/hey24sheep/dotnetkiteconnect?style=flat-square&label=%E2%98%85&color=BDB3E0) |
-| [twitch_sheep](https://github.com/hey24sheep/twitch_sheep) | Twitch chat drives lights and IoT | ![stars](https://img.shields.io/github/stars/hey24sheep/twitch_sheep?style=flat-square&label=%E2%98%85&color=BDB3E0) |
-| [Never-Ending-Game](https://github.com/hey24sheep/Never-Ending-Game) | A Godot game that never ends | ![stars](https://img.shields.io/github/stars/hey24sheep/Never-Ending-Game?style=flat-square&label=%E2%98%85&color=BDB3E0) |
+| [LSystem_Fractal_Trees_P5](https://github.com/hey24sheep/LSystem_Fractal_Trees_P5) | L-system fractal trees in p5.js | ![stars](https://img.shields.io/github/stars/hey24sheep/LSystem_Fractal_Trees_P5?style=flat-square&label=%E2%98%85&color=1CBDF5) |
+
+## 🚀 Products
+
+| Product | Role | About | Status |
+| --- | --- | --- | --- |
+| [Cuscato](https://cuscato.com) | Founder & CTO | Zero-commission storefronts and bookings | |
+| [Neettech](http://neettech.in) | Founder & CTO | Anonymous social network | |
+| Text Is Speech | Creator | Text-to-speech app | Retired |
+| Height Predictor | Creator | Height-prediction app | Retired |
 
 ## 💼 Work
 
