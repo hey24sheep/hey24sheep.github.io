@@ -93,7 +93,16 @@ AI video, generative art, games and streams.
 
 </details>
 
-## 🧰 Open source
+## 🚀 SaaS / Apps / Companies
+
+| Product | Role | About | Status |
+| --- | --- | --- | --- |
+| [Cuscato](https://cuscato.com) | Founder & CTO | Zero-commission storefronts and bookings | |
+| [Neettech](http://neettech.in) | Founder & CTO | Anonymous social network | |
+| Text Is Speech | Creator | Text-to-speech app | Retired |
+| Height Predictor | Creator | Height-prediction app | Retired |
+
+## 🧰 Open Source Products
 
 | Project | About | Stars |
 | --- | --- | --- |
@@ -103,16 +112,6 @@ AI video, generative art, games and streams.
 | [uiblock](https://github.com/hey24sheep/uiblock) | Block UI in Flutter apps | ![stars](https://img.shields.io/github/stars/hey24sheep/uiblock?style=flat-square&label=%E2%98%85&color=1CBDF5) |
 | [backdrop_modal_route](https://github.com/hey24sheep/backdrop_modal_route) | Backdrop modal routes for Flutter | ![stars](https://img.shields.io/github/stars/hey24sheep/backdrop_modal_route?style=flat-square&label=%E2%98%85&color=1CBDF5) |
 | [azure-environment-variables](https://github.com/hey24sheep/azure-environment-variables) | Env-variable task for Azure DevOps | ![stars](https://img.shields.io/github/stars/hey24sheep/azure-environment-variables?style=flat-square&label=%E2%98%85&color=BDB3E0) |
-| [LSystem_Fractal_Trees_P5](https://github.com/hey24sheep/LSystem_Fractal_Trees_P5) | L-system fractal trees in p5.js | ![stars](https://img.shields.io/github/stars/hey24sheep/LSystem_Fractal_Trees_P5?style=flat-square&label=%E2%98%85&color=1CBDF5) |
-
-## 🚀 Products
-
-| Product | Role | About | Status |
-| --- | --- | --- | --- |
-| [Cuscato](https://cuscato.com) | Founder & CTO | Zero-commission storefronts and bookings | |
-| [Neettech](http://neettech.in) | Founder & CTO | Anonymous social network | |
-| Text Is Speech | Creator | Text-to-speech app | Retired |
-| Height Predictor | Creator | Height-prediction app | Retired |
 
 ## 💼 Work
 

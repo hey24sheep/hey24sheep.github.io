@@ -134,13 +134,13 @@ const projectRow = (r: Row, rarity: (role: string) => Rarity): Item => {
     links: (name?.links ?? []).map((l) => ({ label: host(l.url), url: l.url })),
   };
 };
-const mine = table(/products?|saas|apps|my projects|ventures/i).map((r) => projectRow(r, (role) => (/founder/i.test(role) ? 'Unique' : 'Common')));
+const mine = table(/saas|apps|companies|my projects|ventures/i).map((r) => projectRow(r, (role) => (/founder/i.test(role) ? 'Unique' : 'Common')));
 const corp = table(/corporate|work|experience/i).map((r) => projectRow(r, () => 'Guild'));
-if (!oss.length && !mine.length && !corp.length) fail('no Open source / Products / Work tables found');
+if (!oss.length && !mine.length && !corp.length) fail('no SaaS / Open Source / Work tables found');
 
 export const inventory: Group[] = [
-  { id: 'oss', label: 'Open source', hint: 'Rarity = GitHub stars: Legendary 100+ · Rare 10+', items: oss },
-  { id: 'mine', label: 'Products', hint: 'SaaS and apps I built', items: mine },
+  { id: 'mine', label: 'SaaS / Apps / Companies', hint: 'SaaS, apps and companies I built', items: mine },
+  { id: 'oss', label: 'Open Source Products', hint: 'Rarity = GitHub stars: Legendary 100+ · Rare 10+', items: oss },
   { id: 'corp', label: 'Corporate', hint: 'Where I work and have worked', items: corp },
 ].filter((g) => g.items.length);
 
