@@ -7,7 +7,8 @@
   - "Many hats": one <details> per hat, summary "Emoji <b>Name</b> · Class". Inside: a description,
     a line of `abilities` and bullet links (loot; "— Note" after a link labels it). Known names get a
     pixel hat and a Sheep Run perk: Architect, Founder, Flutter dev, White hat, Maker, Creative.
-  - Tables: edit the rows, keep the columns. Star counts are fetched automatically.
+  - Tables: edit the rows, keep the columns; keep "About" to a few words. Star counts are fetched automatically.
+  - The experience badge is counted by the site from the year I started (2014); no need to edit it.
   - "Reach me": a badge's alt text is its label on the site; the mailto: link is used for every email button.
   - Leave a blank line inside HTML tags such as <div> and <details>.
 -->
@@ -16,9 +17,9 @@
 
 <a href="https://hey24sheep.com"><img src="https://hey24sheep.com/banner.png" alt="Hey24sheep — Architect | Founder | And Many Other Hats" width="100%"></a>
 
-I'm **Heyramb Narayan Goyal**, a technical architect with 12+ years of experience. I design cloud systems, lead engineering teams and still ship the code.
+I'm **Heyramb Narayan Goyal**, a technical architect. I design cloud systems, lead engineering teams and still ship the code.
 
-[![hey24sheep.com](https://img.shields.io/badge/hey24sheep.com-1CBDF5?style=for-the-badge&logo=googlechrome&logoColor=white)](https://hey24sheep.com) [![Email](https://img.shields.io/badge/Email-FF7AA2?style=for-the-badge&logo=gmail&logoColor=white)](mailto:hey24sheep@gmail.com) [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logoColor=white)](https://linkedin.com/in/hey24sheep) [![Play Sheep Run](https://img.shields.io/badge/%E2%96%B6_Play_Sheep_Run-F2C14E?style=for-the-badge)](https://hey24sheep.com/#play)
+![Experience](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fhey24sheep.com%2Fstats.json&query=%24.experience&label=experience&style=for-the-badge&color=2B1B5A&labelColor=140A2E) [![hey24sheep.com](https://img.shields.io/badge/hey24sheep.com-1CBDF5?style=for-the-badge&logo=googlechrome&logoColor=white)](https://hey24sheep.com) [![Email](https://img.shields.io/badge/Email-FF7AA2?style=for-the-badge&logo=gmail&logoColor=white)](mailto:hey24sheep@gmail.com) [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logoColor=white)](https://linkedin.com/in/hey24sheep) [![Play Sheep Run](https://img.shields.io/badge/%E2%96%B6_Play_Sheep_Run-F2C14E?style=for-the-badge)](https://hey24sheep.com/#play)
 
 </div>
 
@@ -26,7 +27,7 @@ I'm **Heyramb Narayan Goyal**, a technical architect with 12+ years of experienc
 
 <details><summary>⛑️ <b>Architect</b> · Technical Architect</summary>
 
-Cloud and data architecture on Azure and .NET, plus the teams and SDLC that ship it. Now at FeliZeek Technologies; before that, Buildsys.
+Cloud and data architecture on Azure and .NET, and the teams that ship it.
 
 `Azure` `.NET / C#` `MS SQL` `Azure DevOps` `Node.js` `Team leadership`
 
@@ -38,7 +39,7 @@ Cloud and data architecture on Azure and .NET, plus the teams and SDLC that ship
 
 <details><summary>🎩 <b>Founder</b> · Founder &amp; CTO</summary>
 
-Founder & CTO of Cuscato (zero-commission storefronts and bookings) and Neettech (an open, anonymous social world).
+Building Cuscato and Neettech.
 
 `Product` `SaaS` `Architecture` `Shipping`
 
@@ -49,7 +50,7 @@ Founder & CTO of Cuscato (zero-commission storefronts and bookings) and Neettech
 
 <details><summary>📱 <b>Flutter dev</b> · Mobile Developer</summary>
 
-Flutter packages on pub.dev that other apps build on, plus Android and Windows Phone apps.
+Flutter packages on pub.dev, plus Android and Windows Phone apps.
 
 `Flutter` `Dart` `Android`
 
@@ -70,7 +71,7 @@ Finding vulnerabilities and disclosing them responsibly.
 
 <details><summary>🛠️ <b>Maker</b> · Hardware Tinkerer</summary>
 
-Arduino, Raspberry Pi and microcontrollers; tools that rescue failing SD cards; Twitch chat that drives the lights.
+Arduino, Raspberry Pi, microcontrollers and data-rescue tools.
 
 `Arduino` `Raspberry Pi` `IoT` `Go` `TypeScript`
 
@@ -82,7 +83,7 @@ Arduino, Raspberry Pi and microcontrollers; tools that rescue failing SD cards; 
 
 <details><summary>🎨 <b>Creative</b> · Creative Coder &amp; Streamer</summary>
 
-AI video with open models, GFX/VFX, L-system trees, a Godot game that never ends, and game streams on Twitch and YouTube.
+AI video, generative art, games and streams.
 
 `AI video` `p5.js` `Godot` `GFX / VFX` `Streaming`
 
@@ -92,38 +93,38 @@ AI video with open models, GFX/VFX, L-system trees, a Godot game that never ends
 
 </details>
 
+## 🚀 Products
+
+| Product | Role | About | Status |
+| --- | --- | --- | --- |
+| [Cuscato](https://cuscato.com) | Founder & CTO | Zero-commission storefronts and bookings | |
+| [Neettech](http://neettech.in) | Founder & CTO | Anonymous social network | |
+| Text Is Speech | Creator | Text-to-speech app | Retired |
+| Height Predictor | Creator | Height-prediction app | Retired |
+
 ## 🧰 Open source
 
-| Project | About | Stars | Links |
-| --- | --- | --- | --- |
-| [videoforge](https://github.com/hey24sheep/videoforge) | Script to finished YouTube and Shorts episodes with open AI models, on your own GPU. | ![stars](https://img.shields.io/github/stars/hey24sheep/videoforge?style=flat-square&label=%E2%98%85&color=1CBDF5) | |
-| [aio-sdcard-doctor](https://github.com/hey24sheep/aio-sdcard-doctor) | Get photos off a failing SD card safely: rescue, image, verify and undelete. | ![stars](https://img.shields.io/github/stars/hey24sheep/aio-sdcard-doctor?style=flat-square&label=%E2%98%85&color=1CBDF5) | |
-| [azure-flutter-tasks](https://github.com/hey24sheep/azure-flutter-tasks) | Flutter build tasks for Azure DevOps pipelines. | ![stars](https://img.shields.io/github/stars/hey24sheep/azure-flutter-tasks?style=flat-square&label=%E2%98%85&color=F2C14E) | [Marketplace](https://marketplace.visualstudio.com/publishers/Hey24sheep) |
-| [uiblock](https://github.com/hey24sheep/uiblock) | Block and unblock UI in Flutter apps. | ![stars](https://img.shields.io/github/stars/hey24sheep/uiblock?style=flat-square&label=%E2%98%85&color=1CBDF5) | [pub.dev](https://pub.dev/publishers/hey24sheep.com/packages) |
-| [LSystem_Fractal_Trees_P5](https://github.com/hey24sheep/LSystem_Fractal_Trees_P5) | Procedural fractal plants with L-systems in p5.js. | ![stars](https://img.shields.io/github/stars/hey24sheep/LSystem_Fractal_Trees_P5?style=flat-square&label=%E2%98%85&color=1CBDF5) | [Play](https://hey24sheep.github.io/LSystem_Fractal_Trees_P5/) |
-| [backdrop_modal_route](https://github.com/hey24sheep/backdrop_modal_route) | Backdrop modal routes for Flutter with minimal code. | ![stars](https://img.shields.io/github/stars/hey24sheep/backdrop_modal_route?style=flat-square&label=%E2%98%85&color=1CBDF5) | |
-| [azure-environment-variables](https://github.com/hey24sheep/azure-environment-variables) | Azure DevOps task for custom environment variables. | ![stars](https://img.shields.io/github/stars/hey24sheep/azure-environment-variables?style=flat-square&label=%E2%98%85&color=BDB3E0) | |
-| [dotnetkiteconnect](https://github.com/hey24sheep/dotnetkiteconnect) | .NET library for the Kite Connect trading API. | ![stars](https://img.shields.io/github/stars/hey24sheep/dotnetkiteconnect?style=flat-square&label=%E2%98%85&color=BDB3E0) | |
-| [twitch_sheep](https://github.com/hey24sheep/twitch_sheep) | Let Twitch chat control your lights, OBS and IoT devices. | ![stars](https://img.shields.io/github/stars/hey24sheep/twitch_sheep?style=flat-square&label=%E2%98%85&color=BDB3E0) | |
-| [Never-Ending-Game](https://github.com/hey24sheep/Never-Ending-Game) | A Godot 2D game that never ends. Neither does its to-do list. | ![stars](https://img.shields.io/github/stars/hey24sheep/Never-Ending-Game?style=flat-square&label=%E2%98%85&color=BDB3E0) | |
-
-## 🚀 My projects
-
-| Project | Role | About | Status |
-| --- | --- | --- | --- |
-| [Cuscato](https://cuscato.com) | Founder & CTO | Branded storefronts for orders and bookings — zero commission. | |
-| [Neettech](http://neettech.in) | Founder & CTO | An open, anonymous social world. | |
-| Text Is Speech | Creator | Text-to-speech app for Android and Windows Phone. | Retired |
-| Height Predictor | Creator | Height-prediction app for Windows Phone. | Retired |
+| Project | About | Stars |
+| --- | --- | --- |
+| [videoforge](https://github.com/hey24sheep/videoforge) | Script to AI video episodes, on your GPU | ![stars](https://img.shields.io/github/stars/hey24sheep/videoforge?style=flat-square&label=%E2%98%85&color=1CBDF5) |
+| [aio-sdcard-doctor](https://github.com/hey24sheep/aio-sdcard-doctor) | Rescue photos from failing SD cards | ![stars](https://img.shields.io/github/stars/hey24sheep/aio-sdcard-doctor?style=flat-square&label=%E2%98%85&color=1CBDF5) |
+| [azure-flutter-tasks](https://github.com/hey24sheep/azure-flutter-tasks) | Flutter tasks for Azure DevOps | ![stars](https://img.shields.io/github/stars/hey24sheep/azure-flutter-tasks?style=flat-square&label=%E2%98%85&color=F2C14E) |
+| [uiblock](https://github.com/hey24sheep/uiblock) | Block UI in Flutter apps | ![stars](https://img.shields.io/github/stars/hey24sheep/uiblock?style=flat-square&label=%E2%98%85&color=1CBDF5) |
+| [LSystem_Fractal_Trees_P5](https://github.com/hey24sheep/LSystem_Fractal_Trees_P5) | L-system fractal trees in p5.js | ![stars](https://img.shields.io/github/stars/hey24sheep/LSystem_Fractal_Trees_P5?style=flat-square&label=%E2%98%85&color=1CBDF5) |
+| [backdrop_modal_route](https://github.com/hey24sheep/backdrop_modal_route) | Backdrop modal routes for Flutter | ![stars](https://img.shields.io/github/stars/hey24sheep/backdrop_modal_route?style=flat-square&label=%E2%98%85&color=1CBDF5) |
+| [azure-environment-variables](https://github.com/hey24sheep/azure-environment-variables) | Env-variable task for Azure DevOps | ![stars](https://img.shields.io/github/stars/hey24sheep/azure-environment-variables?style=flat-square&label=%E2%98%85&color=BDB3E0) |
+| [dotnetkiteconnect](https://github.com/hey24sheep/dotnetkiteconnect) | .NET library for Kite Connect | ![stars](https://img.shields.io/github/stars/hey24sheep/dotnetkiteconnect?style=flat-square&label=%E2%98%85&color=BDB3E0) |
+| [twitch_sheep](https://github.com/hey24sheep/twitch_sheep) | Twitch chat drives lights and IoT | ![stars](https://img.shields.io/github/stars/hey24sheep/twitch_sheep?style=flat-square&label=%E2%98%85&color=BDB3E0) |
+| [Never-Ending-Game](https://github.com/hey24sheep/Never-Ending-Game) | A Godot game that never ends | ![stars](https://img.shields.io/github/stars/hey24sheep/Never-Ending-Game?style=flat-square&label=%E2%98%85&color=BDB3E0) |
 
 ## 💼 Work
 
 | Company | Role | About | Status |
 | --- | --- | --- | --- |
-| [FeliZeek Technologies](https://www.felizeek.com/) | Technical Architect | Architecture, databases and cloud across products and teams. | |
-| [Buildsys](https://in.linkedin.com/company/buildsysinc) | Sr. Software Developer | Team lead, architecture and the full SDLC to client handover. | Previous |
-| [Console Tuner](https://www.consoletuner.com/) | Moderator · scripts · research | Scripts and research for the Console Tuner community. | |
-| [Freelance](https://www.freelancer.com/u/hey24sheep) | Security researcher & consultant | Vulnerability testing with responsible disclosure; software and consulting. | |
+| [FeliZeek Technologies](https://www.felizeek.com/) | Technical Architect | Cloud and data architecture | |
+| [Buildsys](https://in.linkedin.com/company/buildsysinc) | Sr. Software Developer | Teams, architecture, SDLC | Previous |
+| [Console Tuner](https://www.consoletuner.com/) | Scripts and research | Community scripts | |
+| [Freelance](https://www.freelancer.com/u/hey24sheep) | Security and consulting | Vulnerability research | |
 
 ## 📣 Reach me
 

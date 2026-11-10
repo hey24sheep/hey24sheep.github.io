@@ -19,7 +19,7 @@ export const GET: APIRoute = () => {
     '## Roles',
     ...hats.map((h) => `- ${h.name} (${h.cls}): ${h.desc}`),
     '',
-    '## Ventures and projects',
+    '## Products',
     ...group('mine').map((i) => `- ${link(i.name, i.links[0]?.url)}${i.role ? ` — ${i.role}` : ''}${i.status ? ` (${i.status})` : ''}: ${i.desc}`),
     '',
     '## Open source',
