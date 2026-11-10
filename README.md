@@ -1,24 +1,12 @@
-# Portfolio for [hey24sheep.com](https://hey24sheep.com)
+# hey24sheep.com
 
-<!--[![Header](https://github-readme-stats.vercel.app/api?username=Hey24sheep&show_icons=true&include_all_commits=true)](https://some-url.dev/)-->
+Source of [hey24sheep.com](https://hey24sheep.com), the portfolio of Heyramb Narayan Goyal (Hey24sheep).
 
-[![build-deployment](https://github.com/hey24sheep/hey24sheep.github.io/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/hey24sheep/hey24sheep.github.io/actions/workflows/pages/pages-build-deployment)
-
-<h1 align='center'>🙋‍♂️ ʜᴇʟʟᴏ ʜᴇʟʟᴏ 👋</h1>
-<h3 align='center'>
-    ᴘᴏʀᴛғᴏʟɪᴏ ғᴏʀ ʜᴇʏ24sʜᴇᴇᴘ.ᴄᴏᴍ
-</h3>
-</br>
-</br>
-
-<p align='center'>
-  <img align='center' src='https://github-readme-stats.vercel.app/api?username=Hey24sheep&show_icons=true&include_all_commits=true&border_radius=15&theme=dark'/>
-</p>
-
-<sub>
-    Check npm scripts to build/run.
-</sub>
+- `site/`: the Astro site. Content comes from `site/profile/README.md`, a copy of the
+  [hey24sheep/hey24sheep](https://github.com/hey24sheep/hey24sheep) profile README that is synced on every push there.
+  See [site/README.md](site/README.md) to run or change it.
+- `.github/workflows/deploy.yml`: builds `site/` and deploys it to GitHub Pages on pushes to `main`, and daily.
 
 ## License
 
-[Apache License 2.0](https://github.com/hey24sheep/hey24sheep.github.io/blob/main/LICENSE)
+[Apache License 2.0](LICENSE)
