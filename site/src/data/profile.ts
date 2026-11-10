@@ -37,7 +37,7 @@ function links(tokens: Token[] = []): Link[] {
 }
 
 // Split the README into its intro (before the first "##") and "##" sections.
-let handle = 'Hey24sheep';
+let handle = '';
 const intro: Token[] = [];
 const sections: { title: string; tokens: Token[] }[] = [];
 for (const t of marked.lexer(readme)) {
@@ -49,9 +49,16 @@ const section = (re: RegExp) => sections.find((s) => re.test(s.title))?.tokens ?
 const paragraphs = (ts: Token[]) => ts.filter((t): t is Tokens.Paragraph => t.type === 'paragraph');
 const fail = (msg: string): never => { throw new Error(`[profile README] ${msg}`); };
 
+// A banner image's alt text, "Handle — tagline | parts", can stand in for a visible "#" title and bold tagline.
+const bannerAlt = decode(intro.map((t) => t.raw).join('\n').match(/<img[^>]*\balt="([^"]*)"/i)?.[1] ?? '');
+const [bannerHandle = '', bannerTagline = ''] = bannerAlt.split(/\s+[—–]\s+/);
+handle ||= bannerHandle.trim() || 'Hey24sheep';
+const splitTagline = (s: string) => s.split('|').map((x) => x.trim()).filter(Boolean);
 const introParas = paragraphs(intro);
-const taglinePara = introParas.find((p) => p.tokens.length === 1 && p.tokens[0].type === 'strong') ?? fail('missing the bold tagline under the title');
-export const tagline = text(taglinePara.tokens).split('|').map((s) => s.trim()).filter(Boolean);
+const taglinePara = introParas.find((p) => p.tokens.length === 1 && p.tokens[0].type === 'strong');
+export const tagline = taglinePara ? splitTagline(text(taglinePara.tokens))
+  : bannerTagline ? splitTagline(bannerTagline)
+  : fail('missing the tagline: a bold line under the title, or a banner alt text "Handle — tagline"');
 const isLinkRow = (p: Tokens.Paragraph) => !text(p.tokens.filter((t) => t.type !== 'link' && t.type !== 'image')).replace(/[\s·|•]/g, '');
 export const bio = text(introParas.find((p) => p !== taglinePara && !isLinkRow(p))?.tokens).trim();
 // Bio without a leading "I'm <name>." (the site already shows the name next to it).
@@ -115,7 +122,7 @@ const oss: Item[] = table(/open source/i).map((r) => {
 });
 const projectRow = (r: Row, rarity: (role: string) => Rarity): Item => {
   const role = r.role?.text ?? '';
-  const name = r.project ?? r.company;
+  const name = r.project ?? r.product ?? r.company;
   return {
     rarity: rarity(role),
     name: name?.text ?? '',
@@ -127,23 +134,27 @@ const projectRow = (r: Row, rarity: (role: string) => Rarity): Item => {
     links: (name?.links ?? []).map((l) => ({ label: host(l.url), url: l.url })),
   };
 };
-const mine = table(/my projects|ventures/i).map((r) => projectRow(r, (role) => (/founder/i.test(role) ? 'Unique' : 'Common')));
+const mine = table(/products?|saas|apps|my projects|ventures/i).map((r) => projectRow(r, (role) => (/founder/i.test(role) ? 'Unique' : 'Common')));
 const corp = table(/corporate|work|experience/i).map((r) => projectRow(r, () => 'Guild'));
-if (!oss.length && !mine.length && !corp.length) fail('no Open source / My projects / Corporate tables found');
+if (!oss.length && !mine.length && !corp.length) fail('no Open source / Products / Work tables found');
 
 export const inventory: Group[] = [
   { id: 'oss', label: 'Open source', hint: 'Rarity = GitHub stars: Legendary 100+ · Rare 10+', items: oss },
-  { id: 'mine', label: 'My projects', hint: 'Things I founded and built', items: mine },
+  { id: 'mine', label: 'Products', hint: 'SaaS and apps I built', items: mine },
   { id: 'corp', label: 'Corporate', hint: 'Where I work and have worked', items: corp },
 ].filter((g) => g.items.length);
 
-// Hats: "### Name · Class", a description paragraph, a paragraph of `abilities`, a list of loot links.
+// Hats: "### Name · Class" or "<details><summary>Name · Class</summary>", then a description paragraph,
+// a paragraph of `abilities` and a list of loot links.
 const ventureByUrl = new Map(mine.flatMap((m) => m.links.map((l) => [l.url, m] as const)));
 const hatDrafts: { name: string; cls: string; desc: string; abilities: string[]; loot: Loot[] }[] = [];
 for (const t of section(/hats/i)) {
   const cur = hatDrafts.at(-1);
-  if (t.type === 'heading' && (t as Tokens.Heading).depth === 3) {
-    const [name, cls] = text((t as Tokens.Heading).tokens).replace(/^[^\p{L}\p{N}]+/u, '').split(/\s+[·|—–]\s+/).map((s) => s.trim());
+  const summaryHtml = t.type === 'html' ? (t as Tokens.HTML).text.match(/<summary>([\s\S]*?)<\/summary>/i)?.[1] : undefined;
+  const heading = t.type === 'heading' && (t as Tokens.Heading).depth === 3 ? text((t as Tokens.Heading).tokens) : undefined;
+  if (summaryHtml !== undefined || heading !== undefined) {
+    const title = heading ?? decode(summaryHtml!.replace(/<[^>]+>/g, ''));
+    const [name, cls] = title.replace(/^[^\p{L}\p{N}]+/u, '').split(/\s+[·|—–]\s+/).map((s) => s.trim());
     hatDrafts.push({ name, cls: cls || name, desc: '', abilities: [], loot: [] });
   } else if (cur && t.type === 'paragraph') {
     const ts = (t as Tokens.Paragraph).tokens;
@@ -206,6 +217,7 @@ export const gameLoot = [...ossPick, ...[...ventures].reverse()].slice(0, thresh
 
 // SEO
 export const years = Math.floor((Date.now() - Date.parse(site.careerStart)) / (365.25 * 24 * 3600 * 1000));
+export const experience = `${years}+ years`;
 export const currentJob = corp.find((c) => !c.status);
 export const ventureList = ventures.map((v) => ({ name: v.name, url: v.links[0]?.url, desc: v.desc, role: v.role }));
 const andList = (xs: string[]) => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs.at(-1)}`);
